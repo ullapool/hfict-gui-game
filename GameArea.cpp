@@ -9,6 +9,8 @@
 #include "CollisionDetection.h"
 #include <QDebug>
 #include <cmath>
+#include <algorithm>
+#include <vector>
 
 GameArea::GameArea(QWidget *parent) : QWidget(parent)
 {
@@ -62,10 +64,6 @@ void GameArea::shoot(int speed, int angle)
   Shot *shot = new Shot(50, 410, speed, angle);
   this->gameObjects.push_back(shot);
   this->shots.push_back(shot);
-  qDebug() << std::atan2(0, 10);
-  qDebug() << std::atan2(10, 0);
-  qDebug() << std::atan2(0, -10);
-  qDebug() << std::atan2(-10, 0);
 }
 
 void GameArea::reset()
@@ -90,13 +88,29 @@ void GameArea::next()
   }
   this->update();
 
-  // Collision detection
+  // Check balloon hit
+  std::vector<GameObject*> objectToDelete;
   for (Shot *shot : this->shots) {
     if (CollisionDetection::check(this->obstacle, shot)) {
-      qDebug("Collision");
+      qDebug("Balloon hit");
+      // Get impact angle
       double angle = CollisionDetection::impactAngle(this->obstacle, shot);
+
+      // Remove shot
+      auto itShots = std::find(shots.begin(), shots.end(), shot);
+      auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), shot);
+      shots.erase(itShots);
+      gameObjects.erase(itGameObjects);
+      objectToDelete.push_back(shot);
+
+      // Give impulse to obstacle
       this->obstacle->impulse(shot->getSpeed(), angle);
       //emit this->gameFinished();
     }
+  }
+
+  // Delete removed game objects
+  for (GameObject *gameObject : objectToDelete) {
+    delete gameObject;
   }
 }

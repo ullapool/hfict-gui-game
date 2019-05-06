@@ -12,7 +12,8 @@ private:
 public:
   Shot(int x, int y, int speed, int angle);
   virtual void move();
-  int getSpeed();
+  virtual int getSpeed();
+  virtual bool isVisible(int x, int y);
 };
 
 #endif // SHOT_H

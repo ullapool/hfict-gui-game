@@ -23,3 +23,8 @@ int Shot::getSpeed()
 {
   return this->speed;
 }
+
+bool Shot::isVisible(int x, int y)
+{
+
+}

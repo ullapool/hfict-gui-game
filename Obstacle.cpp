@@ -11,7 +11,7 @@ Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile,
 
 void Obstacle::move() {
   int dx = this->speed/10 * cos(this->radAngle);
-  int dy = this->speed/10 * sin(this->radAngle);
+  int dy = this->speed/10 * sin(this->radAngle) * -1;
 
   this->speed = this->speed <= 0 ? 0 : this->speed - 1;
   this->x += dx / 2;
