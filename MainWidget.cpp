@@ -6,13 +6,20 @@
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
+  qDebug("Main Widget");
   this->createLayout();
   this->connectObjects();
 }
 
 void MainWidget::togglePlayer()
 {
+  qDebug("Toggle Player");
   this->isPlayerTwosTurn = !this->isPlayerTwosTurn;
+  Player *activePlayer = this->gameArea->getPlayers().at(this->isPlayerTwosTurn);
+  this->angleSlider->setValue(activePlayer->getAngle());
+  this->speedSlider->setValue(activePlayer->getSpeed());
+  this->numberOfShotsInput->setText(QString::number(activePlayer->getShots()));
+  qDebug("Toggle Player finished");
 }
 
 bool MainWidget::getIsPlayerOnesTurn() const
@@ -22,6 +29,7 @@ bool MainWidget::getIsPlayerOnesTurn() const
 
 void MainWidget::createLayout()
 {
+  qDebug("Create Layout");
   // Create widgets
   QLabel *title = new QLabel("<h1>The Gorilla QT Game</h1>");
   title->setFixedHeight(30);
@@ -66,6 +74,7 @@ void MainWidget::createLayout()
 
 void MainWidget::connectObjects()
 {
+  qDebug("Connect Objects");
   connect(this->angleSlider, &QSlider::valueChanged, this, &MainWidget::angleSliderMoved);
   connect(this->speedSlider, &QSlider::valueChanged, this, &MainWidget::speedSliderMoved);
   connect(this->actionButton, &QPushButton::clicked, this, &MainWidget::actionButtonClicked);

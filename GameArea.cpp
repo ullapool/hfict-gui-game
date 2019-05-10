@@ -12,8 +12,10 @@
 #include <algorithm>
 #include <vector>
 
-GameArea::GameArea(QWidget *parent) : QWidget(parent)
+GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr)
 {
+  qDebug("Game Area");
+
   // Load background image
   this->backgroundImg = new QImage(Constants::imgFolder + "background.jpg");
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
@@ -68,18 +70,17 @@ void GameArea::startGame()
 
 void GameArea::shoot(int speed, int angle)
 {
-  Shot *shot = new Shot(50, 410, speed, angle);
-  this->gameObjects.push_back(shot);
-  this->shots.push_back(shot);
+  this->activeShot = new Shot(50, 410, speed, angle);
+  this->gameObjects.push_back(this->activeShot);
 }
 
-void GameArea::removeShot(Shot *shot)
+void GameArea::removeShot()
 {
-  auto itShots = std::find(shots.begin(), shots.end(), shot);
-  auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), shot);
-  shots.erase(itShots);
+  qDebug("Remove Shot");
+  auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), this->activeShot);
   gameObjects.erase(itGameObjects);
-  delete shot;
+  delete this->activeShot;
+  this->activeShot = nullptr;
 }
 
 void GameArea::reset()
@@ -87,7 +88,7 @@ void GameArea::reset()
   std::vector<GameObject*> tempObjects = this->gameObjects;
 
   // Remove all game objects from vectors
-  this->shots.clear();
+  this->activeShot = nullptr;
   this->gameObjects.clear();
 
   // Delete all game objects
@@ -101,6 +102,29 @@ std::vector<Player *> GameArea::getPlayers() const
   return players;
 }
 
+void GameArea::balloonHit()
+{
+  qDebug("Balloon hit");
+
+  // Get impact angle
+  double angle = CollisionDetection::impactAngle(this->obstacle, this->activeShot);
+
+  // Give impulse to obstacle
+  this->obstacle->impulse(this->activeShot->getSpeed(), angle);
+
+  // Remove shot
+  this->removeShot();
+  emit this->playerToggled();
+}
+
+void GameArea::balloonMissed()
+{
+  qDebug("Out of bounds");
+
+  this->removeShot();
+  emit this->playerToggled();
+}
+
 void GameArea::next()
 {
   // Move objects
@@ -110,25 +134,8 @@ void GameArea::next()
   this->update();
 
   // Check balloon hit
-  for (Shot *shot : this->shots) {
-    if (CollisionDetection::check(this->obstacle, shot)) {
-      qDebug("Balloon hit");
-      // Get impact angle
-      double angle = CollisionDetection::impactAngle(this->obstacle, shot);
+  if (this->activeShot && CollisionDetection::check(this->obstacle, this->activeShot)) balloonHit();
 
-      // Give impulse to obstacle
-      this->obstacle->impulse(shot->getSpeed(), angle);
-
-      // Remove shot
-      this->removeShot(shot);
-
-      //emit this->gameFinished();
-    }
-
-    // Check out of bounds
-    if (CollisionDetection::outOfBounds(shot, this)) {
-      qDebug("Out of bounds");
-      this->removeShot(shot);
-    }
-  }
+  // Check out of bounds
+  if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) balloonMissed();
 }

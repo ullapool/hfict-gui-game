@@ -24,7 +24,7 @@ public:
   void paintEvent(QPaintEvent *event);
   void startGame();
   void shoot(int speed, int angle);
-  void removeShot(Shot *shot);
+  void removeShot();
   void reset();
   std::vector<Player *> getPlayers() const;
 
@@ -35,15 +35,19 @@ private:
   QImage *backgroundImg;
   std::vector<GameObject*> gameObjects;
   std::vector<Shot*> shots;
+  Shot *activeShot;
   std::vector<Player*> players;
   Obstacle *obstacle;
 
 
   // Methods
   void setupAnimationThread();
+  void balloonHit();
+  void balloonMissed();
   void next();
 
 // Event Handling
+
 signals:
   void gameFinished();
   void playerToggled();

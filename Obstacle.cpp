@@ -20,6 +20,7 @@ void Obstacle::move() {
 
 void Obstacle::impulse(int speed, double radAngle)
 {
+  qDebug("Impulse");
   this->speed = speed;
   this->radAngle = radAngle;
 }
