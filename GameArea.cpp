@@ -68,9 +68,9 @@ void GameArea::startGame()
   this->gameObjects.push_back(this->obstacle);
 }
 
-void GameArea::shoot(int speed, int angle)
+void GameArea::shoot(Player *player)
 {
-  this->activeShot = new Shot(50, 410, speed, angle);
+  this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
   this->gameObjects.push_back(this->activeShot);
 }
 

@@ -23,7 +23,7 @@ public:
   // Methods
   void paintEvent(QPaintEvent *event);
   void startGame();
-  void shoot(int speed, int angle);
+  void shoot(Player *player);
   void removeShot();
   void reset();
   std::vector<Player *> getPlayers() const;

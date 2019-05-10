@@ -105,10 +105,11 @@ void MainWidget::actionButtonClicked()
     this->gameArea->startGame();
   } else {
     qDebug("Shooting");
-    this->gameArea->getPlayers().at(this->isPlayerTwosTurn)->incrementShots();
-    int shots = this->gameArea->getPlayers().at(this->isPlayerTwosTurn)->getShots();
+    Player *player = this->gameArea->getPlayers().at(this->isPlayerTwosTurn);
+    player->incrementShots();
+    int shots = player->getShots();
     this->numberOfShotsInput->setText(QString::number(shots));
-    this->gameArea->shoot(this->speedSlider->value(), this->angleSlider->value());
+    this->gameArea->shoot(player);
   }
 }
 

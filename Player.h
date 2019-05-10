@@ -18,6 +18,7 @@ public:
   int getSpeed() const;
   void setSpeed(int value);
   int getAngle() const;
+  int getAngleConverted() const;
   void setAngle(int value);
 };
 

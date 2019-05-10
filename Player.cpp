@@ -23,7 +23,12 @@ void Player::setSpeed(int value)
 
 int Player::getAngle() const
 {
-  return angle;
+  return this->angle;
+}
+
+int Player::getAngleConverted() const
+{
+  return this->isPlayerTwo ? 180 - this->angle : this->angle;
 }
 
 void Player::setAngle(int value)
