@@ -6,18 +6,30 @@
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
-  this->createObjects();
+  qDebug("Main Widget");
   this->createLayout();
   this->connectObjects();
 }
 
-void MainWidget::createObjects()
+void MainWidget::togglePlayer()
 {
+  qDebug("Toggle Player");
+  this->isPlayerTwosTurn = !this->isPlayerTwosTurn;
+  Player *activePlayer = this->gameArea->getPlayers().at(this->isPlayerTwosTurn);
+  this->angleSlider->setValue(activePlayer->getAngle());
+  this->speedSlider->setValue(activePlayer->getSpeed());
+  this->numberOfShotsInput->setText(QString::number(activePlayer->getShots()));
+  qDebug("Toggle Player finished");
+}
 
+bool MainWidget::getIsPlayerOnesTurn() const
+{
+  return isPlayerTwosTurn;
 }
 
 void MainWidget::createLayout()
 {
+  qDebug("Create Layout");
   // Create widgets
   QLabel *title = new QLabel("<h1>The Gorilla QT Game</h1>");
   title->setFixedHeight(30);
@@ -29,12 +41,14 @@ void MainWidget::createLayout()
   this->angleSlider = new QSlider(Qt::Orientation::Horizontal);
   this->angleSlider->setMinimum(0);
   this->angleSlider->setMaximum(90);
+  this->angleSlider->setEnabled(false);
   this->speedSlider = new QSlider(Qt::Orientation::Horizontal);
   this->speedSlider->setMinimum(1);
   this->speedSlider->setMaximum(100);
+  this->speedSlider->setEnabled(false);
   this->actionButton = new QPushButton("Start");
-  this->numberOfShootsInput = new QLineEdit();
-  this->numberOfShootsInput->setReadOnly(true);
+  this->numberOfShotsInput = new QLineEdit();
+  this->numberOfShotsInput->setReadOnly(true);
 
 
   // Create layout
@@ -43,7 +57,7 @@ void MainWidget::createLayout()
 
   layoutControls->addWidget(actionButton);
   layoutControls->addWidget(new QLabel("#Shots"));
-  layoutControls->addWidget(numberOfShootsInput);
+  layoutControls->addWidget(numberOfShotsInput);
   layoutControls->addWidget(new QLabel("Speed"));
   layoutControls->addWidget(speedSlider);
   layoutControls->addWidget(speedInput);
@@ -60,20 +74,24 @@ void MainWidget::createLayout()
 
 void MainWidget::connectObjects()
 {
+  qDebug("Connect Objects");
   connect(this->angleSlider, &QSlider::valueChanged, this, &MainWidget::angleSliderMoved);
   connect(this->speedSlider, &QSlider::valueChanged, this, &MainWidget::speedSliderMoved);
   connect(this->actionButton, &QPushButton::clicked, this, &MainWidget::actionButtonClicked);
-  connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::onGameFinished);
+  connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
+  connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
 }
 
 void MainWidget::speedSliderMoved(int value)
 {
   this->speedInput->setText(QString::number(value));
+  this->gameArea->getPlayers().at(this->isPlayerTwosTurn)->setSpeed(value);
 }
 
 void MainWidget::angleSliderMoved(int value)
 {
   this->angleInput->setText(QString::number(value));
+  this->gameArea->getPlayers().at(this->isPlayerTwosTurn)->setAngle(value);
 }
 
 void MainWidget::actionButtonClicked()
@@ -81,21 +99,24 @@ void MainWidget::actionButtonClicked()
   if(this->actionButton->text() == "Start") {
     qDebug("Starting game");
     this->actionButton->setText("Shoot");
-    this->numberOfShootsInput->setText("0");
+    this->angleSlider->setEnabled(true);
+    this->speedSlider->setEnabled(true);
+    this->numberOfShotsInput->setText("0");
     this->gameArea->startGame();
   } else {
     qDebug("Shooting");
-    this->numberOfShootsInput->setText(
-      QString::number(this->numberOfShootsInput->text().toInt() + 1)
-    );
-    this->gameArea->shoot(this->speedSlider->value(), this->angleSlider->value());
+    Player *player = this->gameArea->getPlayers().at(this->isPlayerTwosTurn);
+    player->incrementShots();
+    int shots = player->getShots();
+    this->numberOfShotsInput->setText(QString::number(shots));
+    this->gameArea->shoot(player);
   }
 }
 
-void MainWidget::onGameFinished()
+void MainWidget::gameFinished()
 {
   qDebug("Game Finished");
   this->actionButton->setText("Start");
-  this->numberOfShootsInput->setText("");
+  this->numberOfShotsInput->setText("");
   this->gameArea->reset();
 }

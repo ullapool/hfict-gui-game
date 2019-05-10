@@ -34,6 +34,8 @@ int GameObject::radius()
   return (this->width() + this->height()) / 4;
 }
 
+GameObject::GameObject() {}
+
 GameObject::GameObject(int x, int y, QString imgFile, int width)
 {
   this->x = x;

@@ -12,8 +12,10 @@
 #include <algorithm>
 #include <vector>
 
-GameArea::GameArea(QWidget *parent) : QWidget(parent)
+GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr)
 {
+  qDebug("Game Area");
+
   // Load background image
   this->backgroundImg = new QImage(Constants::imgFolder + "background.jpg");
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
@@ -48,22 +50,37 @@ void GameArea::setupAnimationThread()
 
 void GameArea::startGame()
 {
+  srand(time(nullptr));
+
   // Create player
-  this->gameObjects.push_back(new Player(20, 410));
+  Player *player1 = new Player(20, 410, false);
+  Player *player2 = new Player(this->width() - Constants::player2Width - 20, 410, true);
+  this->gameObjects.push_back(player1);
+  this->gameObjects.push_back(player2);
+  this->players.push_back(player1);
+  this->players.push_back(player2);
+  if (rand() % 2) emit this->playerToggled();
 
   // Create obstacle
-  srand(time(nullptr));
   int x = this->width() / 2 - Constants::obstacleWidth / 2;
   int y = rand() % static_cast<int>(this->height() * 0.75);
   this->obstacle = new Obstacle(x, y);
   this->gameObjects.push_back(this->obstacle);
 }
 
-void GameArea::shoot(int speed, int angle)
+void GameArea::shoot(Player *player)
 {
-  Shot *shot = new Shot(50, 410, speed, angle);
-  this->gameObjects.push_back(shot);
-  this->shots.push_back(shot);
+  this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
+  this->gameObjects.push_back(this->activeShot);
+}
+
+void GameArea::removeShot()
+{
+  qDebug("Remove Shot");
+  auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), this->activeShot);
+  gameObjects.erase(itGameObjects);
+  delete this->activeShot;
+  this->activeShot = nullptr;
 }
 
 void GameArea::reset()
@@ -71,13 +88,41 @@ void GameArea::reset()
   std::vector<GameObject*> tempObjects = this->gameObjects;
 
   // Remove all game objects from vectors
-  this->shots.clear();
+  this->activeShot = nullptr;
   this->gameObjects.clear();
 
   // Delete all game objects
   for (GameObject *gameObject : tempObjects) {
     delete gameObject;
   }
+}
+
+std::vector<Player *> GameArea::getPlayers() const
+{
+  return players;
+}
+
+void GameArea::balloonHit()
+{
+  qDebug("Balloon hit");
+
+  // Get impact angle
+  double angle = CollisionDetection::impactAngle(this->obstacle, this->activeShot);
+
+  // Give impulse to obstacle
+  this->obstacle->impulse(this->activeShot->getSpeed(), angle);
+
+  // Remove shot
+  this->removeShot();
+  emit this->playerToggled();
+}
+
+void GameArea::balloonMissed()
+{
+  qDebug("Out of bounds");
+
+  this->removeShot();
+  emit this->playerToggled();
 }
 
 void GameArea::next()
@@ -89,28 +134,8 @@ void GameArea::next()
   this->update();
 
   // Check balloon hit
-  std::vector<GameObject*> objectToDelete;
-  for (Shot *shot : this->shots) {
-    if (CollisionDetection::check(this->obstacle, shot)) {
-      qDebug("Balloon hit");
-      // Get impact angle
-      double angle = CollisionDetection::impactAngle(this->obstacle, shot);
+  if (this->activeShot && CollisionDetection::check(this->obstacle, this->activeShot)) balloonHit();
 
-      // Remove shot
-      auto itShots = std::find(shots.begin(), shots.end(), shot);
-      auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), shot);
-      shots.erase(itShots);
-      gameObjects.erase(itGameObjects);
-      objectToDelete.push_back(shot);
-
-      // Give impulse to obstacle
-      this->obstacle->impulse(shot->getSpeed(), angle);
-      //emit this->gameFinished();
-    }
-  }
-
-  // Delete removed game objects
-  for (GameObject *gameObject : objectToDelete) {
-    delete gameObject;
-  }
+  // Check out of bounds
+  if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) balloonMissed();
 }

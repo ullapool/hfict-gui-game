@@ -10,8 +10,10 @@ public:
   static QString imgFolder;
   static int obstacleWidth;
   static QString obstacleImgFile;
-  static int playerWidth;
-  static QString playerImgFile;
+  static int player1Width;
+  static QString player1ImgFile;
+  static int player2Width;
+  static QString player2ImgFile;
   static int shotWidth;
   static QString shotImgFile;
 };
