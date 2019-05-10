@@ -21,8 +21,9 @@ public:
   // Properties
 
   // Methods
+  void togglePlayer();
+  bool getIsPlayerOnesTurn() const;
 
-// Private Members
 private:
   // Constructors
   MainWidget(const MainWidget & obj);
@@ -32,13 +33,13 @@ private:
   QSlider *angleSlider;
   QSlider *speedSlider;
   QPushButton *actionButton;
-  QLineEdit *numberOfShootsInput;
+  QLineEdit *numberOfShotsInput;
   QLineEdit *speedInput;
   QLineEdit *angleInput;
   GameArea *gameArea;
+  bool isPlayerTwosTurn;
 
   // Methods
-  void createObjects();
   void createLayout();
   void connectObjects();
 
@@ -50,7 +51,7 @@ public slots:
   void speedSliderMoved(int value);
   void angleSliderMoved(int value);
   void actionButtonClicked();
-  void onGameFinished();
+  void gameFinished();
 
 private slots:
 

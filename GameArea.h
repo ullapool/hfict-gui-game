@@ -7,6 +7,7 @@
 #include <GameObject.h>
 #include "Obstacle.h"
 #include "Shot.h"
+#include "Player.h"
 
 class GameArea : public QWidget
 {
@@ -23,9 +24,10 @@ public:
   void paintEvent(QPaintEvent *event);
   void startGame();
   void shoot(int speed, int angle);
+  void removeShot(Shot *shot);
   void reset();
+  std::vector<Player *> getPlayers() const;
 
-// Private Members
 private:
   // Constructors
 
@@ -33,6 +35,7 @@ private:
   QImage *backgroundImg;
   std::vector<GameObject*> gameObjects;
   std::vector<Shot*> shots;
+  std::vector<Player*> players;
   Obstacle *obstacle;
 
 
@@ -43,6 +46,7 @@ private:
 // Event Handling
 signals:
   void gameFinished();
+  void playerToggled();
 
 public slots:
 

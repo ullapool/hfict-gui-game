@@ -1,5 +1,6 @@
 #include "CollisionDetection.h"
 #include "GameObject.h"
+#include "GameArea.h"
 #include <cmath>
 #include <QDebug>
 
@@ -22,4 +23,12 @@ double CollisionDetection::impactAngle(GameObject *object1, GameObject *object2)
   int distY = object1->center().ry() - object2->center().ry();
   qDebug() << atan2(distY, distX);
   return atan2(distY, distX);
+}
+
+bool CollisionDetection::outOfBounds(GameObject *object, GameArea *area)
+{
+  if (object->getX() + object->width() <= 0) return true;
+  if (object->getX() >= area->width()) return true;
+  if (object->getY() >= area->height()) return true;
+  return false;
 }
