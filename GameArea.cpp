@@ -13,7 +13,7 @@
 #include <vector>
 #include "Goal.h"
 
-GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr)
+GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr), balloon(nullptr)
 {
   qDebug("Game Area");
 
@@ -52,10 +52,12 @@ void GameArea::setupAnimationThread()
 void GameArea::resetBalloon()
 {
   qDebug("Reset Balloon");
-  auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), this->balloon);
-  if (itGameObjects != gameObjects.end()) gameObjects.erase(itGameObjects);
-  delete this->balloon;
-  this->balloon = nullptr;
+  if (this->balloon) {
+    auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), this->balloon);
+    gameObjects.erase(itGameObjects);
+    delete this->balloon;
+    this->balloon = nullptr;
+  }
 
   int x = this->width() / 2 - Constants::obstacleWidth / 2;
   int y = rand() % static_cast<int>(this->height() * 0.75);
