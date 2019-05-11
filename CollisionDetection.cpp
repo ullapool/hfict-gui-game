@@ -23,6 +23,7 @@ bool CollisionDetection::checkBalloon(GameObject *object1, GameObject *object2)
 bool CollisionDetection::checkGoal(Obstacle *balloon, Goal *goal)
 {
   //qDebug("Collision Check Goal");
+  if (balloon->getSpeed() <= 0) return false;
   int goalInnerRadius = goal->height() / 2 - 20;
   int goalTop = goal->center().ry() - goalInnerRadius;
   int goalBottom = goal->center().ry() + goalInnerRadius;
