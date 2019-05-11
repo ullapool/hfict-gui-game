@@ -3,12 +3,14 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDebug>
+#include <QKeyEvent>
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
   qDebug("Main Widget");
   this->createLayout();
   this->connectObjects();
+  this->setFocusPolicy(Qt::StrongFocus);
 }
 
 void MainWidget::togglePlayer()
@@ -81,11 +83,57 @@ void MainWidget::connectObjects()
   connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
   connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
   connect(this->gameArea, &GameArea::scored, this, &MainWidget::updateScore);
+
+  // Controls Key Binding
+  connect(this, &MainWidget::keyPressEnter, this->actionButton, &QPushButton::click);
+  connect(this, &MainWidget::keyPressUp, [this]{
+    this->angleSlider->setValue(this->angleSlider->value()+1);
+  });
+  connect(this, &MainWidget::keyPressDown, [this]{
+    this->angleSlider->setValue(this->angleSlider->value()-1);
+  });
+  connect(this, &MainWidget::keyPressRight, [this]{
+    this->speedSlider->setValue(this->speedSlider->value()+1);
+  });
+  connect(this, &MainWidget::keyPressLeft, [this]{
+    this->speedSlider->setValue(this->speedSlider->value()-1);
+  });
 }
 
 void MainWidget::updateScore()
 {
 
+}
+
+void MainWidget::keyPressEvent(QKeyEvent *event)
+{
+  qDebug() << "Key Press Event:";
+  switch (event->key()) {
+    case Qt::Key_Up:
+      qDebug() << "  Up";
+      emit this->keyPressUp();
+      break;
+    case Qt::Key_Down:
+      qDebug() << "  Down";
+      emit this->keyPressDown();
+      break;
+    case Qt::Key_Left:
+      qDebug() << "  Left";
+      emit this->keyPressLeft();
+      break;
+    case Qt::Key_Right:
+      qDebug() << "  Right";
+      emit this->keyPressRight();
+      break;
+    case Qt::Key_Enter:
+      qDebug() << "  Enter";
+      emit this->keyPressEnter();
+      break;
+    case Qt::Key_Return:
+      qDebug() << "  Return";
+      emit this->keyPressEnter();
+      break;
+  }
 }
 
 void MainWidget::speedSliderMoved(int value)
