@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QPoint>
 
+
 class GameObject
 {
 protected:

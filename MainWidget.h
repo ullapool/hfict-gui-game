@@ -1,3 +1,4 @@
+
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
@@ -7,6 +8,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include "GameArea.h"
+#include "soundbox.h"
 
 
 class MainWidget : public QWidget
@@ -37,6 +39,7 @@ private:
   QLineEdit *speedInput;
   QLineEdit *angleInput;
   GameArea *gameArea;
+  Soundbox *soundBox;
   bool isPlayerTwosTurn;
 
   // Methods

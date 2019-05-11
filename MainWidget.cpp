@@ -1,4 +1,5 @@
 #include "MainWidget.h"
+//#include "soundbox.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -80,6 +81,7 @@ void MainWidget::connectObjects()
   connect(this->actionButton, &QPushButton::clicked, this, &MainWidget::actionButtonClicked);
   connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
   connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
+
 }
 
 void MainWidget::speedSliderMoved(int value)
@@ -96,6 +98,9 @@ void MainWidget::angleSliderMoved(int value)
 
 void MainWidget::actionButtonClicked()
 {
+    soundBox->playSound();
+
+
   if(this->actionButton->text() == "Start") {
     qDebug("Starting game");
     this->actionButton->setText("Shoot");

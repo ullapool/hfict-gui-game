@@ -18,3 +18,8 @@ QString Constants::player2ImgFile("player2.png");
 // Shot
 int Constants::shotWidth = 40;
 QString Constants::shotImgFile("banana.png");
+
+
+//Sounds
+
+QString Constants::soundFolder("C:\\SynologyDrive\\hfict-gui-game\\sounds");

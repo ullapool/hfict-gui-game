@@ -16,6 +16,9 @@ public:
   static QString player2ImgFile;
   static int shotWidth;
   static QString shotImgFile;
+
+  //Sounds
+  static QString soundFolder;
 };
 
 #endif // CONSTANTS_H
