@@ -11,6 +11,7 @@ QString Constants::obstacleImgFile("ballon.png");
 int Constants::player1Width = 150;
 QString Constants::player1ImgFile("player1.png");
 
+
 // Player 2
 int Constants::player2Width = 150;
 QString Constants::player2ImgFile("player2.png");
@@ -18,3 +19,9 @@ QString Constants::player2ImgFile("player2.png");
 // Shot
 int Constants::shotWidth = 40;
 QString Constants::shotImgFile("banana.png");
+
+// Goal 1
+QString Constants::goal1ImgFile("goal1.png");
+
+// Goal 2
+QString Constants::goal2ImgFile("goal2.png");

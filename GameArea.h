@@ -8,6 +8,7 @@
 #include "Obstacle.h"
 #include "Shot.h"
 #include "Player.h"
+#include "Goal.h"
 
 class GameArea : public QWidget
 {
@@ -37,18 +38,21 @@ private:
   std::vector<Shot*> shots;
   Shot *activeShot;
   std::vector<Player*> players;
-  Obstacle *obstacle;
+  std::vector<Goal*> goals;
+  Obstacle *balloon;
 
 
   // Methods
   void setupAnimationThread();
+  void resetBalloon();
   void balloonHit();
   void balloonMissed();
+  void goalHit(Goal *goal);
   void next();
 
 // Event Handling
-
 signals:
+  void scored(int player);
   void gameFinished();
   void playerToggled();
 
