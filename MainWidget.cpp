@@ -87,16 +87,16 @@ void MainWidget::connectObjects()
   // Controls Key Binding
   connect(this, &MainWidget::keyPressEnter, this->actionButton, &QPushButton::click);
   connect(this, &MainWidget::keyPressUp, [this]{
-    this->angleSlider->setValue(this->angleSlider->value()+1);
+    if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
   });
   connect(this, &MainWidget::keyPressDown, [this]{
-    this->angleSlider->setValue(this->angleSlider->value()-1);
+    if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
   connect(this, &MainWidget::keyPressRight, [this]{
-    this->speedSlider->setValue(this->speedSlider->value()+1);
+    if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
   });
   connect(this, &MainWidget::keyPressLeft, [this]{
-    this->speedSlider->setValue(this->speedSlider->value()-1);
+    if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
 }
 
