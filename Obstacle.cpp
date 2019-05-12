@@ -1,7 +1,10 @@
 #include "Obstacle.h"
+#include "soundbox.h"
 #include "Constants.h"
 #include <cmath>
 #include <QDebug>
+#include <QVector>
+#include <QString>
 
 Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile, Constants::obstacleWidth) {
   this->speed = 0;
@@ -10,6 +13,7 @@ Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile,
 }
 
 void Obstacle::move() {
+
   int dx = this->speed/10 * cos(this->radAngle);
   int dy = this->speed/10 * sin(this->radAngle) * -1;
 
@@ -20,6 +24,9 @@ void Obstacle::move() {
 
 void Obstacle::impulse(int speed, double radAngle)
 {
+  //sound once the ballon is hit
+  this->soundbox = new Soundbox;
+  soundbox->gotHitSound();
   qDebug("Impulse");
   this->speed = speed;
   this->radAngle = radAngle;

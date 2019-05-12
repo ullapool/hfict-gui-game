@@ -1,6 +1,6 @@
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
-
+#include "soundbox.h"
 #include "GameObject.h"
 
 
@@ -14,6 +14,7 @@ public:
   Obstacle(int x, int y);
   virtual void move();
   virtual void impulse(int speed, double radAngle);
+  Soundbox *soundbox;
 };
 
 #endif // OBSTACLE_H

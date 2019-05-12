@@ -16,6 +16,7 @@ public:
     static QString gotHit;
     static QString strike;
     static QString opponentScored;
+    static QString gotHit_2;
 
 
 
