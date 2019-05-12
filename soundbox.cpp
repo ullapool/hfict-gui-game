@@ -8,23 +8,46 @@
 
 //Sounds
 
-QString Soundbox::shoots("C:\\SynologyDrive\\hfict-gui-game\\sounds\\bam_shoot.m4a");
+QString Soundbox::shots("bam.mp3");
+QString Soundbox::gotHit("yaFucker.mp3");
+QString Soundbox::strike("juhu.mp3");
+QString Soundbox::opponentScored("bastard.mp3");
 
 Soundbox::Soundbox()
 {
- qDebug() << "Soundbox const calles" <<endl;
+ qDebug() << "Soundbox const. called" <<endl;
  this->mPlayer = new QMediaPlayer;
-
 }
 
-void Soundbox::playSound()
+void Soundbox::shotSound()
 {
-
    qDebug() << "playSound called" <<endl;
-   //file = ("C:\\SynologyDrive\\hfict-gui-game\\sounds\\"); //(Constants::soundFolder + this->shoots);
-   this->mPlayer->setMedia(QUrl::fromLocalFile(this->shoots));
+   QString soundPath = Constants::soundFolder;
+   this->mPlayer->setMedia(QUrl::fromLocalFile(soundPath + this->shots));
    qDebug() << "after setmedia" <<endl;
    this->mPlayer->play();
-
 }
 
+
+void Soundbox::gotHitSound()
+{
+    QString soundPath = Constants::soundFolder;
+    this->mPlayer->setMedia(QUrl::fromLocalFile(soundPath + this->gotHit));
+    qDebug() << "after setmedia" <<endl;
+    this->mPlayer->play();
+}
+void Soundbox::opponentScoredSound()
+{
+    QString soundPath = Constants::soundFolder;
+    this->mPlayer->setMedia(QUrl::fromLocalFile(soundPath + this->opponentScored));
+    qDebug() << "after setmedia" <<endl;
+    this->mPlayer->play();
+
+}
+void Soundbox::strikeBallonSound()
+{
+    QString soundPath = Constants::soundFolder;
+    this->mPlayer->setMedia(QUrl::fromLocalFile(soundPath + this->strike));
+    qDebug() << "after setmedia" <<endl;
+    this->mPlayer->play();
+}

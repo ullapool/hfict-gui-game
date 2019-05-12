@@ -1,5 +1,5 @@
 #include "MainWidget.h"
-//#include "soundbox.h"
+#include "soundbox.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -98,9 +98,6 @@ void MainWidget::angleSliderMoved(int value)
 
 void MainWidget::actionButtonClicked()
 {
-
-
-
   if(this->actionButton->text() == "Start") {
     qDebug("Starting game");
     this->actionButton->setText("Shoot");
@@ -115,7 +112,10 @@ void MainWidget::actionButtonClicked()
     int shots = player->getShots();
     this->numberOfShotsInput->setText(QString::number(shots));
     this->gameArea->shoot(player);
-    soundBox->playSound();
+    //sounds
+    this->soundBox = new Soundbox();
+    soundBox->shotSound();
+
 
   }
 }

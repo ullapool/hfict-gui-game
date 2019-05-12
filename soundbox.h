@@ -7,18 +7,22 @@
 #include <QtMultimedia/QMediaPlayer>
 
 
-class Soundbox : public GameObject
+class Soundbox
 {
-    //Q_OBJECT
 public:
     Soundbox();
-
-    QString file;
-
     //Sounds
-    static QString shoots;
+    static QString shots;
+    static QString gotHit;
+    static QString strike;
+    static QString opponentScored;
 
-  void playSound();
+
+
+    void shotSound();
+    void gotHitSound();
+    void opponentScoredSound();
+    void strikeBallonSound();
 
 private:
      QMediaPlayer *mPlayer;
