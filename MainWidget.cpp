@@ -67,6 +67,16 @@ void MainWidget::createLayout()
   layoutControls->addWidget(angleSlider);
   layoutControls->addWidget(angleInput);
 
+  // Prevent controls from gaining focus
+  for (int i = 0; i < layoutControls->count(); ++i)
+  {
+    QWidget *widget = layoutControls->itemAt(i)->widget();
+    if (widget)
+    {
+      widget->setFocusPolicy(Qt::NoFocus);
+    }
+  }
+
   layoutMain->addWidget(title);
   layoutMain->addWidget(gameArea);
   layoutMain->addLayout(layoutControls);
