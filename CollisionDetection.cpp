@@ -8,6 +8,10 @@
 
 CollisionDetection::CollisionDetection() {}
 
+int CollisionDetection::boundaryNone = 0;
+int CollisionDetection::boundaryHorizontal = 1;
+int CollisionDetection::boundaryVertical = 2;
+
 bool CollisionDetection::checkBalloon(GameObject *object1, GameObject *object2)
 {
   //qDebug("Collision Check Balloon");
@@ -34,6 +38,14 @@ bool CollisionDetection::checkGoal(Obstacle *balloon, Goal *goal)
                 balloon->center().rx() < goal->center().rx();
 
   return hitY && hitX;
+}
+
+int CollisionDetection::checkBoundary(Obstacle *balloon, GameArea *area)
+{
+  if (balloon->getSpeed() <= 0) return CollisionDetection::boundaryNone;
+  if (balloon->center().y() <= 0 || balloon->center().y() >= area->height()) return CollisionDetection::boundaryHorizontal;
+  if (balloon->center().x() <= 0 || balloon->center().x() >= area->width()) return CollisionDetection::boundaryVertical;
+  return CollisionDetection::boundaryNone;
 }
 
 double CollisionDetection::impactAngle(GameObject *object1, GameObject *object2)

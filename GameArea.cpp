@@ -175,6 +175,10 @@ void GameArea::next()
     if (this->balloon && CollisionDetection::checkGoal(this->balloon, goal)) this->goalHit(goal);
   }
 
+  // Check boundary hit
+  int boundaryCollision = this->balloon ? CollisionDetection::checkBoundary(this->balloon, this) : 0;
+  if (boundaryCollision) this->balloon->impulse(boundaryCollision);
+
   // Check out of bounds
   if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) this->balloonMissed();
 }
