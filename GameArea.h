@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "Goal.h"
 
+class MainWidget;
+
 class GameArea : public QWidget
 {
   Q_OBJECT
@@ -17,7 +19,7 @@ class GameArea : public QWidget
 // Public Members
 public:
   // Constructors
-  explicit GameArea(QWidget *parent = nullptr);
+  explicit GameArea(MainWidget *parent = nullptr);
 
   // Properties
 
@@ -33,6 +35,7 @@ private:
   // Constructors
 
   // Properties
+  MainWidget *parent;
   QImage *backgroundImg;
   std::vector<GameObject*> gameObjects;
   std::vector<Shot*> shots;
