@@ -35,7 +35,8 @@ SOURCES += \
     Player.cpp \
     Shot.cpp \
     Thread.cpp \
-    CollisionDetection.cpp
+    CollisionDetection.cpp \
+    Goal.cpp
 
 HEADERS += \
         MainWindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
     Player.h \
     Shot.h \
     Thread.h \
-    CollisionDetection.h
+    CollisionDetection.h \
+    Goal.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

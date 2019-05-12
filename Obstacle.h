@@ -14,6 +14,7 @@ public:
   Obstacle(int x, int y);
   virtual void move();
   virtual void impulse(int speed, double radAngle);
+  int getSpeed() const;
 };
 
 #endif // OBSTACLE_H

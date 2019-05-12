@@ -11,6 +11,11 @@ void Player::incrementShots()
   this->shots++;
 }
 
+void Player::resetShots()
+{
+  this->shots = 0;
+}
+
 int Player::getSpeed() const
 {
   return speed;
@@ -36,7 +41,23 @@ void Player::setAngle(int value)
   angle = value;
 }
 
-Player::Player(int x, int y, bool playerTwo) : isPlayerTwo(playerTwo), shots(0), speed(0), angle(0) {
+int Player::getScore() const
+{
+  return score;
+}
+
+void Player::incrementScore()
+{
+  this->score++;
+}
+
+void Player::resetScore()
+{
+  this->score = 0;
+}
+
+Player::Player(int x, int y, bool playerTwo) : isPlayerTwo(playerTwo), shots(0), speed(0), angle(0), score(0)
+{
   QString imgPath = Constants::imgFolder;
   imgPath += this->isPlayerTwo ? Constants::player2ImgFile : Constants::player1ImgFile;
   int imgWidth = this->isPlayerTwo ? Constants::player2Width : Constants::player1Width;
