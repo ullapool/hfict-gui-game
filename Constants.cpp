@@ -1,7 +1,7 @@
 #include "Constants.h"
 
 // Root folder of images
-QString Constants::imgFolder("C:\\Users\\yanni\\OneDrive\\Dokumente\\dev\\hfict-gui-game\\img\\");
+QString Constants::imgFolder("C:\\SynologyDrive\\hfict-gui-game\\img\\");
 
 // Obstacle
 int Constants::obstacleWidth = 80;
@@ -22,4 +22,4 @@ QString Constants::shotImgFile("banana.png");
 
 //Sounds
 
-QString Constants::soundFolder("C:\\SynologyDrive\\hfict-gui-game\\sounds");
+QString Constants::soundFolder("C:\\SynologyDrive\\hfict-gui-game\\sounds\\");

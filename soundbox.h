@@ -18,10 +18,11 @@ public:
     //Sounds
     static QString shoots;
 
+  void playSound();
 
-    void playSound();
 private:
      QMediaPlayer *mPlayer;
+
 
 };
 

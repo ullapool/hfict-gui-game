@@ -98,7 +98,7 @@ void MainWidget::angleSliderMoved(int value)
 
 void MainWidget::actionButtonClicked()
 {
-    soundBox->playSound();
+
 
 
   if(this->actionButton->text() == "Start") {
@@ -115,6 +115,8 @@ void MainWidget::actionButtonClicked()
     int shots = player->getShots();
     this->numberOfShotsInput->setText(QString::number(shots));
     this->gameArea->shoot(player);
+    soundBox->playSound();
+
   }
 }
 
