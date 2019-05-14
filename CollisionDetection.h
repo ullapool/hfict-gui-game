@@ -12,8 +12,14 @@ public:
   CollisionDetection();
   static bool checkBalloon(GameObject *object1, GameObject *object2);
   static bool checkGoal(Obstacle *balloon, Goal *goal);
+  static int checkBoundary(Obstacle *balloon, GameArea *area);
   static double impactAngle(GameObject *object1, GameObject *object2);
   static bool outOfBounds(GameObject *object, GameArea *area);
+
+  // Boundary collision types
+  static int boundaryHorizontal;
+  static int boundaryVertical;
+  static int boundaryNone;
 };
 
 #endif // COLLISIONDETECTION_H

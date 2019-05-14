@@ -10,9 +10,14 @@ private:
   int speed;
   double radAngle;
   double t;
+  int invertXMovement;
+  int invertYMovement;
+  void toggleXMovement();
+  void toggleYMovement();
 public:
   Obstacle(int x, int y);
   virtual void move();
+  virtual void impulse(int boundary);
   virtual void impulse(int speed, double radAngle);
   int getSpeed() const;
 };

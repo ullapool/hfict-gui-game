@@ -3,12 +3,14 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDebug>
+#include <QKeyEvent>
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
   qDebug("Main Widget");
   this->createLayout();
   this->connectObjects();
+  this->setFocusPolicy(Qt::StrongFocus);
 }
 
 void MainWidget::togglePlayer()
@@ -65,6 +67,16 @@ void MainWidget::createLayout()
   layoutControls->addWidget(angleSlider);
   layoutControls->addWidget(angleInput);
 
+  // Prevent controls from gaining focus
+  for (int i = 0; i < layoutControls->count(); ++i)
+  {
+    QWidget *widget = layoutControls->itemAt(i)->widget();
+    if (widget)
+    {
+      widget->setFocusPolicy(Qt::NoFocus);
+    }
+  }
+
   layoutMain->addWidget(title);
   layoutMain->addWidget(gameArea);
   layoutMain->addLayout(layoutControls);
@@ -81,11 +93,57 @@ void MainWidget::connectObjects()
   connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
   connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
   connect(this->gameArea, &GameArea::scored, this, &MainWidget::updateScore);
+
+  // Controls Key Binding
+  connect(this, &MainWidget::keyPressEnter, this->actionButton, &QPushButton::click);
+  connect(this, &MainWidget::keyPressUp, [this]{
+    if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
+  });
+  connect(this, &MainWidget::keyPressDown, [this]{
+    if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
+  });
+  connect(this, &MainWidget::keyPressRight, [this]{
+    if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
+  });
+  connect(this, &MainWidget::keyPressLeft, [this]{
+    if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
+  });
 }
 
 void MainWidget::updateScore()
 {
 
+}
+
+void MainWidget::keyPressEvent(QKeyEvent *event)
+{
+  qDebug() << "Key Press Event:";
+  switch (event->key()) {
+    case Qt::Key_Up:
+      qDebug() << "  Up";
+      emit this->keyPressUp();
+      break;
+    case Qt::Key_Down:
+      qDebug() << "  Down";
+      emit this->keyPressDown();
+      break;
+    case Qt::Key_Left:
+      qDebug() << "  Left";
+      emit this->keyPressLeft();
+      break;
+    case Qt::Key_Right:
+      qDebug() << "  Right";
+      emit this->keyPressRight();
+      break;
+    case Qt::Key_Enter:
+      qDebug() << "  Enter";
+      emit this->keyPressEnter();
+      break;
+    case Qt::Key_Return:
+      qDebug() << "  Return";
+      emit this->keyPressEnter();
+      break;
+  }
 }
 
 void MainWidget::speedSliderMoved(int value)
