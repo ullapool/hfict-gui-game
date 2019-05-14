@@ -1,14 +1,20 @@
 #include "CollisionDetection.h"
 #include "GameObject.h"
+#include "Goal.h"
+#include "Obstacle.h"
 #include "GameArea.h"
 #include <cmath>
 #include <QDebug>
 
 CollisionDetection::CollisionDetection() {}
 
-bool CollisionDetection::check(GameObject *object1, GameObject *object2)
+int CollisionDetection::boundaryNone = 0;
+int CollisionDetection::boundaryHorizontal = 1;
+int CollisionDetection::boundaryVertical = 2;
+
+bool CollisionDetection::checkBalloon(GameObject *object1, GameObject *object2)
 {
-  qDebug("Collision Check");
+  //qDebug("Collision Check Balloon");
   int distX = abs(object1->center().rx() - object2->center().rx());
   int distY = abs(object1->center().ry() - object2->center().ry());
   int dist = sqrt(pow(distX, 2) + pow(distY, 2));
@@ -18,9 +24,33 @@ bool CollisionDetection::check(GameObject *object1, GameObject *object2)
   return isCollision;
 }
 
+bool CollisionDetection::checkGoal(Obstacle *balloon, Goal *goal)
+{
+  //qDebug("Collision Check Goal");
+  if (balloon->getSpeed() <= 0) return false;
+  int goalInnerRadius = goal->height() / 2 - 20;
+  int goalTop = goal->center().ry() - goalInnerRadius;
+  int goalBottom = goal->center().ry() + goalInnerRadius;
+  bool hitY = balloon->center().ry() - balloon->radius() > goalTop &&
+              balloon->center().ry() + balloon->radius() < goalBottom;
+  bool hitX = goal->isGoalTwo() ?
+                balloon->center().rx() > goal->center().rx() :
+                balloon->center().rx() < goal->center().rx();
+
+  return hitY && hitX;
+}
+
+int CollisionDetection::checkBoundary(Obstacle *balloon, GameArea *area)
+{
+  if (balloon->getSpeed() <= 0) return CollisionDetection::boundaryNone;
+  if (balloon->center().y() <= 0 || balloon->center().y() >= area->height()) return CollisionDetection::boundaryHorizontal;
+  if (balloon->center().x() <= 0 || balloon->center().x() >= area->width()) return CollisionDetection::boundaryVertical;
+  return CollisionDetection::boundaryNone;
+}
+
 double CollisionDetection::impactAngle(GameObject *object1, GameObject *object2)
 {
-  qDebug("Collision Angle");
+  //qDebug("Collision Angle");
   int distX = object1->center().rx() - object2->center().rx();
   int distY = object1->center().ry() - object2->center().ry();
   return atan2(distY, distX);
@@ -28,7 +58,7 @@ double CollisionDetection::impactAngle(GameObject *object1, GameObject *object2)
 
 bool CollisionDetection::outOfBounds(GameObject *object, GameArea *area)
 {
-  qDebug("Collision Out of Bounds");
+  //qDebug("Collision Out of Bounds");
   if (object->getX() + object->width() <= 0) return true;
   if (object->getX() >= area->width()) return true;
   if (object->getY() >= area->height()) return true;

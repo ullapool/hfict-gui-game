@@ -24,7 +24,7 @@ public:
 
   // Methods
   void togglePlayer();
-  bool getIsPlayerOnesTurn() const;
+  bool isPlayerTwosTurn() const;
 
 private:
   // Constructors
@@ -40,15 +40,22 @@ private:
   QLineEdit *angleInput;
   GameArea *gameArea;
   Soundbox *soundBox;
-  bool isPlayerTwosTurn;
+  bool playerTwosTurn;
 
   // Methods
   void createLayout();
   void connectObjects();
+  void updateScore();
+  void keyPressEvent(QKeyEvent *event);
 
 
 // Event Handling
 signals:
+  void keyPressUp();
+  void keyPressDown();
+  void keyPressLeft();
+  void keyPressRight();
+  void keyPressEnter();
 
 public slots:
   void speedSliderMoved(int value);

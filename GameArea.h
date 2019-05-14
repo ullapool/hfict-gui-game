@@ -8,6 +8,9 @@
 #include "Obstacle.h"
 #include "Shot.h"
 #include "Player.h"
+#include "Goal.h"
+
+class MainWidget;
 
 class GameArea : public QWidget
 {
@@ -16,7 +19,7 @@ class GameArea : public QWidget
 // Public Members
 public:
   // Constructors
-  explicit GameArea(QWidget *parent = nullptr);
+  explicit GameArea(MainWidget *parent = nullptr);
 
   // Properties
 
@@ -32,23 +35,27 @@ private:
   // Constructors
 
   // Properties
+  MainWidget *parent;
   QImage *backgroundImg;
   std::vector<GameObject*> gameObjects;
   std::vector<Shot*> shots;
   Shot *activeShot;
   std::vector<Player*> players;
-  Obstacle *obstacle;
+  std::vector<Goal*> goals;
+  Obstacle *balloon;
 
 
   // Methods
   void setupAnimationThread();
+  void resetBalloon();
   void balloonHit();
   void balloonMissed();
+  void goalHit(Goal *goal);
   void next();
 
 // Event Handling
-
 signals:
+  void scored(int player);
   void gameFinished();
   void playerToggled();
 
