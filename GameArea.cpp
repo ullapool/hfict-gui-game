@@ -11,8 +11,9 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include "Goal.h"
 
-GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr)
+GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr), balloon(nullptr)
 {
   qDebug("Game Area");
 
@@ -48,6 +49,22 @@ void GameArea::setupAnimationThread()
   animationThread->start();
 }
 
+void GameArea::resetBalloon()
+{
+  qDebug("Reset Balloon");
+  if (this->balloon) {
+    auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), this->balloon);
+    gameObjects.erase(itGameObjects);
+    delete this->balloon;
+    this->balloon = nullptr;
+  }
+
+  int x = this->width() / 2 - Constants::obstacleWidth / 2;
+  int y = rand() % static_cast<int>(this->height() * 0.75);
+  this->balloon = new Obstacle(x, y);
+  this->gameObjects.push_back(this->balloon);
+}
+
 void GameArea::startGame()
 {
   srand(time(nullptr));
@@ -61,11 +78,16 @@ void GameArea::startGame()
   this->players.push_back(player2);
   if (rand() % 2) emit this->playerToggled();
 
+  // Create goal
+  Goal *goal1 = new Goal(20, 30, false);
+  Goal *goal2 = new Goal(this->width() - 80, 30, true);
+  this->gameObjects.push_back(goal1);
+  this->gameObjects.push_back(goal2);
+  this->goals.push_back(goal1);
+  this->goals.push_back(goal2);
+
   // Create obstacle
-  int x = this->width() / 2 - Constants::obstacleWidth / 2;
-  int y = rand() % static_cast<int>(this->height() * 0.75);
-  this->obstacle = new Obstacle(x, y);
-  this->gameObjects.push_back(this->obstacle);
+  this->resetBalloon();
 }
 
 void GameArea::shoot(Player *player)
@@ -107,10 +129,10 @@ void GameArea::balloonHit()
   qDebug("Balloon hit");
 
   // Get impact angle
-  double angle = CollisionDetection::impactAngle(this->obstacle, this->activeShot);
+  double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
 
   // Give impulse to obstacle
-  this->obstacle->impulse(this->activeShot->getSpeed(), angle);
+  this->balloon->impulse(this->activeShot->getSpeed(), angle);
 
   // Remove shot
   this->removeShot();
@@ -125,6 +147,18 @@ void GameArea::balloonMissed()
   emit this->playerToggled();
 }
 
+void GameArea::goalHit(Goal *goal)
+{
+  qDebug("GOOOAAAAL");
+  unsigned int scoringPlayer = !goal->isGoalTwo();
+  this->players.at(scoringPlayer)->incrementScore();
+  qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();
+  emit this->scored(static_cast<int>(scoringPlayer));
+  this->resetBalloon();
+
+  for (Player *player : this->players) player->resetShots();
+}
+
 void GameArea::next()
 {
   // Move objects
@@ -134,8 +168,17 @@ void GameArea::next()
   this->update();
 
   // Check balloon hit
-  if (this->activeShot && CollisionDetection::check(this->obstacle, this->activeShot)) balloonHit();
+  if (this->activeShot && CollisionDetection::checkBalloon(this->balloon, this->activeShot)) this->balloonHit();
+
+  // Check goal hit
+  for (Goal *goal : this->goals) {
+    if (this->balloon && CollisionDetection::checkGoal(this->balloon, goal)) this->goalHit(goal);
+  }
+
+  // Check boundary hit
+  int boundaryCollision = this->balloon ? CollisionDetection::checkBoundary(this->balloon, this) : 0;
+  if (boundaryCollision) this->balloon->impulse(boundaryCollision);
 
   // Check out of bounds
-  if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) balloonMissed();
+  if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) this->balloonMissed();
 }

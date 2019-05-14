@@ -3,10 +3,8 @@
 
 #include <QString>
 
-
-class Constants
-{
-public:
+class Constants {
+ public:
   static QString imgFolder;
   static int obstacleWidth;
   static QString obstacleImgFile;
@@ -16,9 +14,11 @@ public:
   static QString player2ImgFile;
   static int shotWidth;
   static QString shotImgFile;
+  static QString goal1ImgFile;
+  static QString goal2ImgFile;
 
-  //Sounds
+  // Sounds
   static QString soundFolder;
 };
 
-#endif // CONSTANTS_H
+#endif  // CONSTANTS_H

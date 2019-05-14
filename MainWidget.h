@@ -45,10 +45,17 @@ private:
   // Methods
   void createLayout();
   void connectObjects();
+  void updateScore();
+  void keyPressEvent(QKeyEvent *event);
 
 
 // Event Handling
 signals:
+  void keyPressUp();
+  void keyPressDown();
+  void keyPressLeft();
+  void keyPressRight();
+  void keyPressEnter();
 
 public slots:
   void speedSliderMoved(int value);
