@@ -12,8 +12,10 @@
 #include <algorithm>
 #include <vector>
 #include "Goal.h"
+#include <QFont>
+#include <MainWidget.h>
 
-GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr), balloon(nullptr)
+GameArea::GameArea(MainWidget *parent) : QWidget(parent), parent(parent), activeShot(nullptr), balloon(nullptr)
 {
   qDebug("Game Area");
 
@@ -36,6 +38,30 @@ void GameArea::paintEvent(QPaintEvent *event)
   // Game objects
   for (GameObject *gameObject : this->gameObjects) {
     gameObject->paint(p);
+  }
+
+
+  if (this->players.size() == 2) {
+    // Score Board
+    p->setBrush(QBrush(Qt::gray));
+    p->setPen(Qt::gray);
+    p->drawRect(this->width() / 2 - 50, 0, 110, 50);
+
+    QFont font;
+    font.setPixelSize(40);
+    p->setFont(font);
+    p->setPen(Qt::white);
+
+    p->drawText(this->width() / 2 - 35, 40, QString::number(this->players.at(0)->getScore()));
+    p->drawText(this->width() / 2, 40, ":");
+    p->drawText(this->width() / 2 + 25, 40, QString::number(this->players.at(1)->getScore()));
+
+    // Player Indicator
+    p->setPen(QPen(Qt::yellow, 5));
+    int indicatorX = players.at(parent->isPlayerTwosTurn())->getX();
+    int indicatorY = players.at(parent->isPlayerTwosTurn())->getY() + players.at(parent->isPlayerTwosTurn())->height() + 10;
+    int indicatorWidth = players.at(parent->isPlayerTwosTurn())->width();
+    p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
   }
 
   // Release painting ressources

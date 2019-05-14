@@ -22,7 +22,7 @@ public:
 
   // Methods
   void togglePlayer();
-  bool getIsPlayerOnesTurn() const;
+  bool isPlayerTwosTurn() const;
 
 private:
   // Constructors
@@ -37,7 +37,7 @@ private:
   QLineEdit *speedInput;
   QLineEdit *angleInput;
   GameArea *gameArea;
-  bool isPlayerTwosTurn;
+  bool playerTwosTurn;
 
   // Methods
   void createLayout();
