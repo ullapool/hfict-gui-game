@@ -3,6 +3,11 @@
 #include <cmath>
 #include <QDebug>
 
+int Obstacle::getSpeed() const
+{
+    return speed;
+}
+
 Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile, Constants::obstacleWidth) {
   this->speed = 0;
   this->radAngle = 0;

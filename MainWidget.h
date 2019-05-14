@@ -42,6 +42,7 @@ private:
   // Methods
   void createLayout();
   void connectObjects();
+  void updateScore();
 
 
 // Event Handling

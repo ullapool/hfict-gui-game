@@ -16,6 +16,8 @@ public:
   static QString player2ImgFile;
   static int shotWidth;
   static QString shotImgFile;
+  static QString goal1ImgFile;
+  static QString goal2ImgFile;
 };
 
 #endif // CONSTANTS_H
