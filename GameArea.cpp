@@ -176,6 +176,7 @@ void GameArea::balloonMissed()
 void GameArea::goalHit(Goal *goal)
 {
   qDebug("GOOOAAAAL");
+
   unsigned int scoringPlayer = !goal->isGoalTwo();
   this->players.at(scoringPlayer)->incrementScore();
   qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();

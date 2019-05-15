@@ -39,7 +39,7 @@ private:
   QLineEdit *speedInput;
   QLineEdit *angleInput;
   GameArea *gameArea;
-  Soundbox *soundBox;
+  //Soundbox *soundBox;
   bool playerTwosTurn;
 
   // Methods

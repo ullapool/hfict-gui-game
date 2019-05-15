@@ -46,8 +46,7 @@ void Obstacle::impulse(int boundary) {
 
 void Obstacle::impulse(int speed, double radAngle) {
   // sound once the ballon is hit
-  this->soundbox = new Soundbox;
-  soundbox->gotHitSound();
+  Soundbox::gotHitSound();
   qDebug("Impulse");
   this->invertXMovement = 1;
   this->invertYMovement = -1;

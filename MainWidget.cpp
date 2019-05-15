@@ -172,8 +172,10 @@ void MainWidget::actionButtonClicked() {
     this->numberOfShotsInput->setText(QString::number(shots));
     this->gameArea->shoot(player);
     // sounds
-    this->soundBox = new Soundbox();
-    soundBox->shotSound();
+    //this->soundBox = new Soundbox();
+    Soundbox::shotSound();
+
+
   }
 }
 

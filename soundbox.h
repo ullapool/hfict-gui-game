@@ -13,20 +13,22 @@ public:
     Soundbox();
     //Sounds
     static QString shots;
-    static QString gotHit;
+    static QString opponentStriked;
     static QString strike;
     static QString opponentScored;
-    static QString gotHit_2;
+    static QString opponentStriked_2;
+    static QString goal;
 
 
 
-    void shotSound();
-    void gotHitSound();
-    void opponentScoredSound();
-    void strikeBallonSound();
+    static void shotSound();
+    static void gotHitSound();
+    static void opponentScoredSound();
+    static void goalSound();
+    static void strikeBallonSound();
 
 private:
-     QMediaPlayer *mPlayer;
+     //QMediaPlayer *mPlayer;
 
 
 };
