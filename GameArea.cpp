@@ -95,8 +95,8 @@ void GameArea::startGame()
   srand(time(nullptr));
 
   // Create player
-  Player *player1 = new Player(20, 410, false);
-  Player *player2 = new Player(this->width() - Constants::player2Width - 20, 410, true);
+  Player *player1 = new Player(5, 370, false);
+  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 370, true);
   this->gameObjects.push_back(player1);
   this->gameObjects.push_back(player2);
   this->players.push_back(player1);
