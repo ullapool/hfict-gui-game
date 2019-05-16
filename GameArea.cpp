@@ -64,8 +64,7 @@ void GameArea::paintEvent(QPaintEvent *event)
     p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
   }
 
-  // Release painting ressources
-  p->end();
+  delete p;
 }
 
 void GameArea::setupAnimationThread()
