@@ -153,7 +153,7 @@ std::vector<Player *> GameArea::getPlayers() const
 void GameArea::balloonHit()
 {
   qDebug("Balloon hit");
-
+  Soundbox::gotHitSound();
   // Get impact angle
   double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
 
