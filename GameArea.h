@@ -58,6 +58,7 @@ signals:
   void scored(int player);
   void gameFinished();
   void playerToggled();
+  void shotStatusChanged(bool active);
 
 public slots:
 

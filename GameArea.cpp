@@ -119,6 +119,7 @@ void GameArea::shoot(Player *player)
 {
   this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
   this->gameObjects.push_back(this->activeShot);
+  emit shotStatusChanged(true);
 }
 
 void GameArea::removeShot()
@@ -128,6 +129,7 @@ void GameArea::removeShot()
   gameObjects.erase(itGameObjects);
   delete this->activeShot;
   this->activeShot = nullptr;
+  emit shotStatusChanged(false);
 }
 
 void GameArea::reset()
