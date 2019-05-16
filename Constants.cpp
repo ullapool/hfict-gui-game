@@ -25,3 +25,6 @@ QString Constants::goal1ImgFile("goal1.png");
 
 // Goal 2
 QString Constants::goal2ImgFile("goal2.png");
+
+// Trajectory
+bool Constants::showTrajectory = true;

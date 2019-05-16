@@ -64,6 +64,27 @@ void GameArea::paintEvent(QPaintEvent *event)
     p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
   }
 
+  // Shot trajectory
+  if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
+    p->setPen(QPen(Qt::red, 3));
+    Player *player = this->getPlayers().at(parent->isPlayerTwosTurn());
+    double t = 0;
+    int x = player->center().rx();
+    int y = player->center().ry();
+    for (int i = 0; i < 30; i++) {
+      int angle = player->getAngleConverted();
+      int speed = player->getSpeed();
+      const double g = 9.81;
+      double rad = 3.1415926 / 180 * angle;
+      int dx = speed/3 * cos(rad) * t;
+      int dy = speed/3 * sin(rad) * t - (g/2) * pow(t, 2);
+      t += 0.1;
+      x += dx / 2;
+      y -= dy / 2;
+      p->drawPoint(x, y);
+    };
+  }
+
   delete p;
 }
 
