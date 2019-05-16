@@ -9,6 +9,7 @@ private:
   bool goalTwo;
 public:
   Goal(int x, int y, bool goalTwo);
+  virtual ~Goal();
   virtual void move();
   bool isGoalTwo() const;
 };

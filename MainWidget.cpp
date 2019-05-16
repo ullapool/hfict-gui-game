@@ -93,6 +93,7 @@ void MainWidget::connectObjects()
   connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
   connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
   connect(this->gameArea, &GameArea::scored, this, &MainWidget::updateScore);
+  connect(this->gameArea, &GameArea::shotStatusChanged, this->actionButton, &QPushButton::setDisabled);
 
   // Controls Key Binding
   connect(this, &MainWidget::keyPressEnter, this->actionButton, &QPushButton::click);
