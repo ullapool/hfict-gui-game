@@ -168,15 +168,15 @@ void GameArea::balloonHit()
 void GameArea::balloonMissed()
 {
   qDebug("Out of bounds");
-
   this->removeShot();
   emit this->playerToggled();
 }
 
 void GameArea::goalHit(Goal *goal)
 {
-  qDebug("GOOOAAAAL");
 
+  qDebug("GOOOAAAAL");
+  Soundbox::goalSound();
   unsigned int scoringPlayer = !goal->isGoalTwo();
   this->players.at(scoringPlayer)->incrementScore();
   qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();

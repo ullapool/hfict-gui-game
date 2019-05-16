@@ -24,11 +24,8 @@ Soundbox::Soundbox()
 
 void Soundbox::shotSound()
 {
-
-
    QMediaPlayer *mPlayer = new QMediaPlayer;
    mPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + shots));
-   qDebug() << "after setmedia" <<endl;
    mPlayer->play();
 }
 
@@ -42,18 +39,16 @@ void Soundbox::gotHitSound()
 
     std::random_shuffle(soundVec.begin(), soundVec.end());
     shuffled = soundVec.at(0);
-    QString soundPath = Constants::soundFolder;
+    
     QMediaPlayer *mPlayer = new QMediaPlayer;
-    mPlayer->setMedia(QUrl::fromLocalFile(soundPath + shuffled));
-    qDebug() << "after setmedia" <<endl;
+    mPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + shuffled));
     mPlayer->play();
 }
 
 void Soundbox::opponentScoredSound()
 {
-    QString soundPath = Constants::soundFolder;
     QMediaPlayer *mPlayer = new QMediaPlayer;
-    mPlayer->setMedia(QUrl::fromLocalFile(soundPath + opponentScored));
+    mPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + opponentScored));
     qDebug() << "after setmedia" <<endl;
     mPlayer->play();
 
@@ -61,17 +56,15 @@ void Soundbox::opponentScoredSound()
 
 void Soundbox::strikeBallonSound()
 {
-
-    QString soundPath = Constants::soundFolder;
     QMediaPlayer *mPlayer = new QMediaPlayer;
-    mPlayer->setMedia(QUrl::fromLocalFile(soundPath + strike));
+    mPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + strike));
     qDebug() << "after setmedia" <<endl;
     mPlayer->play();
 }
 
 void Soundbox::goalSound()
 {
-    //QString soundPath = Constants::soundFolder;
+    
     QMediaPlayer *mPlayer = new QMediaPlayer;
     mPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + goal));
     mPlayer->play();
