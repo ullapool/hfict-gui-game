@@ -8,7 +8,6 @@
 #include <QSlider>
 #include <QLineEdit>
 #include "GameArea.h"
-#include "soundbox.h"
 
 
 class MainWidget : public QWidget
@@ -39,7 +38,6 @@ private:
   QLineEdit *speedInput;
   QLineEdit *angleInput;
   GameArea *gameArea;
-  //Soundbox *soundBox;
   bool playerTwosTurn;
 
   // Methods

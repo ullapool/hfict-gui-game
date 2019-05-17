@@ -174,7 +174,7 @@ void MainWidget::actionButtonClicked() {
 
     // sounds
 
-    Soundbox::shotSound();
+    Soundbox::playSoundEffect(Soundbox::shooting);
 
 
   }

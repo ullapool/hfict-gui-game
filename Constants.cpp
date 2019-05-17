@@ -1,5 +1,5 @@
 #include "Constants.h"
-#include "soundbox.h"
+
 // Root folder of images
 QString Constants::imgFolder("C:\\gui-game\\hfict-gui-game\\img\\");
 

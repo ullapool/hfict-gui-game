@@ -12,23 +12,22 @@ class Soundbox
 public:
     Soundbox();
     //Sounds
-    static QString shots;
+    static QString shooting;
+    static QString shooting_2;
+    static QString shooting_3;
     static QString opponentStriked;
-    static QString strike;
-    static QString opponentScored;
     static QString opponentStriked_2;
-    static QString goal;
+    static QString opponentStriked_3;
+    static QString strike;
+    static QString strike_2;
+    static QString shootOpponent;
+    static QString shootOpponent_2;
+
+    static QString goalCheering;
 
 
 
-    static void shotSound();
-    static void gotHitSound();
-    static void opponentScoredSound();
-    static void goalSound();
-    static void strikeBallonSound();
-
-private:
-     //QMediaPlayer *mPlayer;
+    static void playSoundEffect(QString sound);
 
 
 };

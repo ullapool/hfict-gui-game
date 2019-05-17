@@ -5,7 +5,6 @@
 #include "GameArea.h"
 #include <cmath>
 #include <QDebug>
-#include "soundbox.h"
 
 CollisionDetection::CollisionDetection() {}
 
