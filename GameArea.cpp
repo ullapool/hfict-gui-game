@@ -224,8 +224,7 @@ void GameArea::next()
   }
 
   // Check boundary hit
-  int boundaryCollision = this->balloon ? CollisionDetection::checkBoundary(this->balloon, this) : 0;
-  if (boundaryCollision) this->balloon->impulse(boundaryCollision);
+  if (this->balloon) this->balloon->impulse(CollisionDetection::checkBoundary(this->balloon, this));
 
   // Check out of bounds
   if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) this->balloonMissed();
