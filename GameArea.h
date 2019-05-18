@@ -38,7 +38,6 @@ private:
   MainWidget *parent;
   QImage *backgroundImg;
   std::vector<GameObject*> gameObjects;
-  std::vector<Shot*> shots;
   Shot *activeShot;
   std::vector<Player*> players;
   std::vector<Goal*> goals;
@@ -57,7 +56,7 @@ private:
 // Event Handling
 signals:
   void scored(int player);
-  void gameFinished();
+  void gameFinished(int player);
   void playerToggled();
   void shotStatusChanged(bool active);
 

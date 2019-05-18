@@ -67,8 +67,4 @@ Player::Player(int x, int y, bool playerTwo) : isPlayerTwo(playerTwo), shots(0),
   *this->img = this->img->scaledToWidth(imgWidth);
 }
 
-Player::~Player() {
-  delete this->img;
-}
-
 void Player::move() {}

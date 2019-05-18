@@ -13,7 +13,6 @@ private:
   int score;
 public:
   Player(int x, int y, bool playerTwo = false);
-  ~Player();
   virtual void move();
   int getShots() const;
   void incrementShots();

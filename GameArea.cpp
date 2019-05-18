@@ -67,7 +67,7 @@ void GameArea::paintEvent(QPaintEvent *event)
   // Shot trajectory
   if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
     p->setPen(QPen(Qt::red, 3));
-    Player *player = this->getPlayers().at(parent->isPlayerTwosTurn());
+    Player *player = this->players.at(parent->isPlayerTwosTurn());
     double t = 0;
     int x = player->center().rx();
     int y = player->center().ry();
@@ -156,16 +156,17 @@ void GameArea::removeShot()
 
 void GameArea::reset()
 {
-  std::vector<GameObject*> tempObjects = this->gameObjects;
-
-  // Remove all game objects from vectors
-  this->activeShot = nullptr;
-  this->gameObjects.clear();
-
   // Delete all game objects
-  for (GameObject *gameObject : tempObjects) {
+  for (GameObject *gameObject : this->gameObjects) {
     delete gameObject;
   }
+
+  // Remove all game objects from vectors
+  this->gameObjects.clear();
+  this->players.clear();
+  this->goals.clear();
+  this->activeShot = nullptr;
+  this->balloon = nullptr;
 }
 
 std::vector<Player *> GameArea::getPlayers() const
@@ -204,13 +205,15 @@ void GameArea::opponentHit()
 void GameArea::goalHit(Goal *goal)
 {
   qDebug("GOOOAAAAL");
-  unsigned int scoringPlayer = !goal->isGoalTwo();
-  this->players.at(scoringPlayer)->incrementScore();
+  int scoringPlayer = !goal->isGoalTwo();
+  this->players.at(static_cast<unsigned long long>(scoringPlayer))->incrementScore();
   qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();
   emit this->scored(static_cast<int>(scoringPlayer));
   this->resetBalloon();
-
   for (Player *player : this->players) player->resetShots();
+  if (this->players.at(static_cast<unsigned long long>(scoringPlayer))->getScore() == Constants::targetScore) {
+    emit this->gameFinished(scoringPlayer);
+  }
 }
 
 void GameArea::next()
@@ -222,7 +225,7 @@ void GameArea::next()
   this->update();
 
   // Check balloon hit
-  if (this->activeShot && CollisionDetection::checkHit(this->balloon, this->activeShot)) this->balloonHit();
+  if (this->activeShot && this->balloon && CollisionDetection::checkHit(this->balloon, this->activeShot)) this->balloonHit();
 
   // Check goal hit
   for (Goal *goal : this->goals) {
@@ -234,7 +237,7 @@ void GameArea::next()
   if (boundaryCollision) this->balloon->impulse(boundaryCollision);
 
   // Check opponent hit
-  if (this->activeShot && CollisionDetection::checkHit(this->players.at(!parent->isPlayerTwosTurn()), this->activeShot)) this->opponentHit();
+  if (this->activeShot && this->players.size() == 2 && CollisionDetection::checkHit(this->players.at(!parent->isPlayerTwosTurn()), this->activeShot)) this->opponentHit();
 
   // Check out of bounds
   if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) this->balloonMissed();
