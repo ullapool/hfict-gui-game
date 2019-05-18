@@ -16,9 +16,13 @@ class Constants {
   static QString shotImgFile;
   static QString goal1ImgFile;
   static QString goal2ImgFile;
+<<<<<<< HEAD
 
   // Sounds
   static QString soundFolder;
+=======
+  static bool showTrajectory;
+>>>>>>> dev
 };
 
 #endif  // CONSTANTS_H

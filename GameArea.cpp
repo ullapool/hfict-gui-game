@@ -65,8 +65,28 @@ void GameArea::paintEvent(QPaintEvent *event)
     p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
   }
 
-  // Release painting ressources
-  p->end();
+  // Shot trajectory
+  if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
+    p->setPen(QPen(Qt::red, 3));
+    Player *player = this->getPlayers().at(parent->isPlayerTwosTurn());
+    double t = 0;
+    int x = player->center().rx();
+    int y = player->center().ry();
+    for (int i = 0; i < 30; i++) {
+      int angle = player->getAngleConverted();
+      int speed = player->getSpeed();
+      const double g = 9.81;
+      double rad = 3.1415926 / 180 * angle;
+      int dx = speed/3 * cos(rad) * t;
+      int dy = speed/3 * sin(rad) * t - (g/2) * pow(t, 2);
+      t += 0.1;
+      x += dx / 2;
+      y -= dy / 2;
+      p->drawPoint(x, y);
+    };
+  }
+
+  delete p;
 }
 
 void GameArea::setupAnimationThread()
@@ -97,8 +117,8 @@ void GameArea::startGame()
   srand(time(nullptr));
 
   // Create player
-  Player *player1 = new Player(20, 410, false);
-  Player *player2 = new Player(this->width() - Constants::player2Width - 20, 410, true);
+  Player *player1 = new Player(5, 370, false);
+  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 370, true);
   this->gameObjects.push_back(player1);
   this->gameObjects.push_back(player2);
   this->players.push_back(player1);
@@ -121,6 +141,7 @@ void GameArea::shoot(Player *player)
 {
   this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
   this->gameObjects.push_back(this->activeShot);
+  emit shotStatusChanged(true);
 }
 
 void GameArea::removeShot()
@@ -130,6 +151,7 @@ void GameArea::removeShot()
   gameObjects.erase(itGameObjects);
   delete this->activeShot;
   this->activeShot = nullptr;
+  emit shotStatusChanged(false);
 }
 
 void GameArea::reset()

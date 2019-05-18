@@ -1,4 +1,4 @@
 build-Debug
 .vscode
-
+*.autosave
 game.pro.user

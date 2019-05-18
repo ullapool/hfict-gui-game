@@ -40,7 +40,7 @@ void MainWidget::createLayout() {
   this->speedInput->setReadOnly(true);
   this->angleSlider = new QSlider(Qt::Orientation::Horizontal);
   this->angleSlider->setMinimum(0);
-  this->angleSlider->setMaximum(90);
+  this->angleSlider->setMaximum(100);
   this->angleSlider->setEnabled(false);
   this->speedSlider = new QSlider(Qt::Orientation::Horizontal);
   this->speedSlider->setMinimum(1);
@@ -92,6 +92,7 @@ void MainWidget::connectObjects() {
   connect(this->gameArea, &GameArea::playerToggled, this,
           &MainWidget::togglePlayer);
   connect(this->gameArea, &GameArea::scored, this, &MainWidget::updateScore);
+  connect(this->gameArea, &GameArea::shotStatusChanged, this->actionButton, &QPushButton::setDisabled);
 
   // Controls Key Binding
   connect(this, &MainWidget::keyPressEnter, this->actionButton,
