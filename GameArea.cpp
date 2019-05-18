@@ -150,6 +150,7 @@ void GameArea::removeShot()
   gameObjects.erase(itGameObjects);
   delete this->activeShot;
   this->activeShot = nullptr;
+  emit this->playerToggled();
   emit shotStatusChanged(false);
 }
 
@@ -184,7 +185,6 @@ void GameArea::balloonHit()
 
   // Remove shot
   this->removeShot();
-  emit this->playerToggled();
 }
 
 void GameArea::balloonMissed()
@@ -192,7 +192,13 @@ void GameArea::balloonMissed()
   qDebug("Out of bounds");
 
   this->removeShot();
-  emit this->playerToggled();
+}
+
+void GameArea::opponentHit()
+{
+  qDebug("Opponent Hit");
+  this->removeShot();
+  // play sound here
 }
 
 void GameArea::goalHit(Goal *goal)
@@ -216,7 +222,7 @@ void GameArea::next()
   this->update();
 
   // Check balloon hit
-  if (this->activeShot && CollisionDetection::checkBalloon(this->balloon, this->activeShot)) this->balloonHit();
+  if (this->activeShot && CollisionDetection::checkHit(this->balloon, this->activeShot)) this->balloonHit();
 
   // Check goal hit
   for (Goal *goal : this->goals) {
@@ -226,6 +232,9 @@ void GameArea::next()
   // Check boundary hit
   int boundaryCollision = this->balloon ? CollisionDetection::checkBoundary(this->balloon, this) : 0;
   if (boundaryCollision) this->balloon->impulse(boundaryCollision);
+
+  // Check opponent hit
+  if (this->activeShot && CollisionDetection::checkHit(this->players.at(!parent->isPlayerTwosTurn()), this->activeShot)) this->opponentHit();
 
   // Check out of bounds
   if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) this->balloonMissed();

@@ -50,6 +50,7 @@ private:
   void resetBalloon();
   void balloonHit();
   void balloonMissed();
+  void opponentHit();
   void goalHit(Goal *goal);
   void next();
 
