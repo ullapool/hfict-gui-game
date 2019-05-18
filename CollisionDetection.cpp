@@ -12,7 +12,7 @@ int CollisionDetection::boundaryNone = 0;
 int CollisionDetection::boundaryHorizontal = 1;
 int CollisionDetection::boundaryVertical = 2;
 
-bool CollisionDetection::checkBalloon(GameObject *object1, GameObject *object2)
+bool CollisionDetection::checkHit(GameObject *object1, GameObject *object2)
 {
   //qDebug("Collision Check Balloon");
   int distX = abs(object1->center().rx() - object2->center().rx());
