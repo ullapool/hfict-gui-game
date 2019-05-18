@@ -30,4 +30,4 @@ QString Constants::goal2ImgFile("goal2.png");
 bool Constants::showTrajectory = true;
 
 // Target Score
-int Constants::targetScore = 1;
+int Constants::targetScore = 2;

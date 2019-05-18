@@ -16,6 +16,13 @@ class GameArea : public QWidget
 {
   Q_OBJECT
 
+enum class GameStatus {
+  NotStarted,
+  InProgress,
+  Player1Won,
+  Player2Won
+};
+
 // Public Members
 public:
   // Constructors
@@ -42,6 +49,7 @@ private:
   std::vector<Player*> players;
   std::vector<Goal*> goals;
   Obstacle *balloon;
+  GameStatus status;
 
 
   // Methods
@@ -55,8 +63,7 @@ private:
 
 // Event Handling
 signals:
-  void scored(int player);
-  void gameFinished(int player);
+  void gameFinished();
   void playerToggled();
   void shotStatusChanged(bool active);
 

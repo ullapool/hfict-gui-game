@@ -15,7 +15,12 @@
 #include <QFont>
 #include <MainWidget.h>
 
-GameArea::GameArea(MainWidget *parent) : QWidget(parent), parent(parent), activeShot(nullptr), balloon(nullptr)
+GameArea::GameArea(MainWidget *parent) :
+  QWidget(parent),
+  parent(parent),
+  activeShot(nullptr),
+  balloon(nullptr),
+  status(GameStatus::NotStarted)
 {
   qDebug("Game Area");
 
@@ -31,58 +36,69 @@ GameArea::GameArea(MainWidget *parent) : QWidget(parent), parent(parent), active
 void GameArea::paintEvent(QPaintEvent *event)
 {
   QPainter *p = new QPainter(this);
+  switch (this->status) {
+  case GameStatus::NotStarted :
+    p->drawText(50, 50, "Click Start to begin!");
+    break;
+  case GameStatus::InProgress :
+    // Background
+    p->drawImage(0, 0, *this->backgroundImg);
 
-  // Background
-  p->drawImage(0, 0, *this->backgroundImg);
+    // Game objects
+    for (GameObject *gameObject : this->gameObjects) {
+      gameObject->paint(p);
+    }
 
-  // Game objects
-  for (GameObject *gameObject : this->gameObjects) {
-    gameObject->paint(p);
-  }
+    if (this->players.size() == 2) {
+      // Score Board
+      p->setBrush(QBrush(Qt::gray));
+      p->setPen(Qt::gray);
+      p->drawRect(this->width() / 2 - 50, 0, 110, 50);
 
+      QFont font;
+      font.setPixelSize(40);
+      p->setFont(font);
+      p->setPen(Qt::white);
 
-  if (this->players.size() == 2) {
-    // Score Board
-    p->setBrush(QBrush(Qt::gray));
-    p->setPen(Qt::gray);
-    p->drawRect(this->width() / 2 - 50, 0, 110, 50);
+      p->drawText(this->width() / 2 - 35, 40, QString::number(this->players.at(0)->getScore()));
+      p->drawText(this->width() / 2, 40, ":");
+      p->drawText(this->width() / 2 + 25, 40, QString::number(this->players.at(1)->getScore()));
 
-    QFont font;
-    font.setPixelSize(40);
-    p->setFont(font);
-    p->setPen(Qt::white);
+      // Player Indicator
+      p->setPen(QPen(Qt::yellow, 5));
+      int indicatorX = players.at(parent->isPlayerTwosTurn())->getX();
+      int indicatorY = players.at(parent->isPlayerTwosTurn())->getY() + players.at(parent->isPlayerTwosTurn())->height() + 10;
+      int indicatorWidth = players.at(parent->isPlayerTwosTurn())->width();
+      p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
+    }
 
-    p->drawText(this->width() / 2 - 35, 40, QString::number(this->players.at(0)->getScore()));
-    p->drawText(this->width() / 2, 40, ":");
-    p->drawText(this->width() / 2 + 25, 40, QString::number(this->players.at(1)->getScore()));
-
-    // Player Indicator
-    p->setPen(QPen(Qt::yellow, 5));
-    int indicatorX = players.at(parent->isPlayerTwosTurn())->getX();
-    int indicatorY = players.at(parent->isPlayerTwosTurn())->getY() + players.at(parent->isPlayerTwosTurn())->height() + 10;
-    int indicatorWidth = players.at(parent->isPlayerTwosTurn())->width();
-    p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
-  }
-
-  // Shot trajectory
-  if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
-    p->setPen(QPen(Qt::red, 3));
-    Player *player = this->players.at(parent->isPlayerTwosTurn());
-    double t = 0;
-    int x = player->center().rx();
-    int y = player->center().ry();
-    for (int i = 0; i < 30; i++) {
-      int angle = player->getAngleConverted();
-      int speed = player->getSpeed();
-      const double g = 9.81;
-      double rad = 3.1415926 / 180 * angle;
-      int dx = speed/3 * cos(rad) * t;
-      int dy = speed/3 * sin(rad) * t - (g/2) * pow(t, 2);
-      t += 0.1;
-      x += dx / 2;
-      y -= dy / 2;
-      p->drawPoint(x, y);
-    };
+    // Shot trajectory
+    if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
+      p->setPen(QPen(Qt::red, 3));
+      Player *player = this->players.at(parent->isPlayerTwosTurn());
+      double t = 0;
+      int x = player->center().rx();
+      int y = player->center().ry();
+      for (int i = 0; i < 30; i++) {
+        int angle = player->getAngleConverted();
+        int speed = player->getSpeed();
+        const double g = 9.81;
+        double rad = 3.1415926 / 180 * angle;
+        int dx = speed/3 * cos(rad) * t;
+        int dy = speed/3 * sin(rad) * t - (g/2) * pow(t, 2);
+        t += 0.1;
+        x += dx / 2;
+        y -= dy / 2;
+        p->drawPoint(x, y);
+      };
+    }
+    break;
+  case GameStatus::Player1Won :
+    p->drawText(50, 50, "Player 1 Won!!!");
+    break;
+  case GameStatus::Player2Won :
+    p->drawText(50, 50, "Player 2 Won!!!");
+    break;
   }
 
   delete p;
@@ -113,6 +129,7 @@ void GameArea::resetBalloon()
 
 void GameArea::startGame()
 {
+  this->status = GameStatus::InProgress;
   srand(time(nullptr));
 
   // Create player
@@ -205,14 +222,14 @@ void GameArea::opponentHit()
 void GameArea::goalHit(Goal *goal)
 {
   qDebug("GOOOAAAAL");
-  int scoringPlayer = !goal->isGoalTwo();
-  this->players.at(static_cast<unsigned long long>(scoringPlayer))->incrementScore();
+  Player *scoringPlayer = this->players.at(!goal->isGoalTwo());
+  scoringPlayer->incrementScore();
   qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();
-  emit this->scored(static_cast<int>(scoringPlayer));
   this->resetBalloon();
   for (Player *player : this->players) player->resetShots();
-  if (this->players.at(static_cast<unsigned long long>(scoringPlayer))->getScore() == Constants::targetScore) {
-    emit this->gameFinished(scoringPlayer);
+  if (scoringPlayer->getScore() == Constants::targetScore) {
+    this->status = scoringPlayer->isPlayerTwo() ? GameStatus::Player2Won : GameStatus::Player1Won;
+    emit this->gameFinished();
     this->reset();
   }
 }

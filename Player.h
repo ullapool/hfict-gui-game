@@ -6,7 +6,7 @@
 class Player : public GameObject
 {
 private:
-  bool isPlayerTwo;
+  bool playerTwo;
   int shots;
   int speed;
   int angle;
@@ -25,6 +25,7 @@ public:
   int getScore() const;
   void incrementScore();
   void resetScore();
+  bool isPlayerTwo() const;
 };
 
 #endif // PLAYER_H
