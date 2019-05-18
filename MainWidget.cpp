@@ -177,5 +177,4 @@ void MainWidget::gameFinished()
   qDebug("Game Finished");
   this->actionButton->setText("Start");
   this->numberOfShotsInput->setText("");
-  this->gameArea->reset();
 }

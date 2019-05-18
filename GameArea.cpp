@@ -213,6 +213,7 @@ void GameArea::goalHit(Goal *goal)
   for (Player *player : this->players) player->resetShots();
   if (this->players.at(static_cast<unsigned long long>(scoringPlayer))->getScore() == Constants::targetScore) {
     emit this->gameFinished(scoringPlayer);
+    this->reset();
   }
 }
 
