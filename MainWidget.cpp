@@ -92,7 +92,6 @@ void MainWidget::connectObjects()
   connect(this->actionButton, &QPushButton::clicked, this, &MainWidget::actionButtonClicked);
   connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
   connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
-  connect(this->gameArea, &GameArea::scored, this, &MainWidget::updateScore);
   connect(this->gameArea, &GameArea::shotStatusChanged, this->actionButton, &QPushButton::setDisabled);
 
   // Controls Key Binding
@@ -109,11 +108,6 @@ void MainWidget::connectObjects()
   connect(this, &MainWidget::keyPressLeft, [this]{
     if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
-}
-
-void MainWidget::updateScore()
-{
-
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *event)
