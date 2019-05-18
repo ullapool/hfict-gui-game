@@ -19,6 +19,7 @@ public:
   static QString goal1ImgFile;
   static QString goal2ImgFile;
   static bool showTrajectory;
+  static int targetScore;
 };
 
 #endif // CONSTANTS_H
