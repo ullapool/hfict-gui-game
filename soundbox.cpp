@@ -21,9 +21,14 @@ Soundbox::Soundbox()
 
   opponentHit.push_back(shootOpponent = "stoppit.mp3");
   opponentHit.push_back(shootOpponent_2 = "stoppityadick.mp3");
+
+  soundtrack = "pirate.mp3";
   goalCheering = "goal.mp3";
 
   musicPlayer = new QMediaPlayer();
+  soundtrackPlayer = new QMediaPlayer();
+  this->soundtrackPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + soundtrack));
+  this->soundtrackPlayer->play();
 }
 
 Soundbox *Soundbox::instance = nullptr;
@@ -41,6 +46,7 @@ Soundbox *Soundbox::getInstance()
 void Soundbox::playSoundEffect(Sound sound)
 {
     QString s;
+    QString m;
     switch(sound) {
     case Sound::shootingJukbox :
         s = shootingJukbox.at(rand() % shootingJukbox.size() );
@@ -55,10 +61,15 @@ void Soundbox::playSoundEffect(Sound sound)
     case Sound::goalCheering :
         s = goalCheering;
         break;
+
+    case Sound::soundtrack :
+        m = soundtrack;
+        break;
 }
 
     this->musicPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + s));
     this->musicPlayer->play();
+
 
 }
 

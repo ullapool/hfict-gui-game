@@ -135,6 +135,8 @@ void GameArea::startGame()
 
   // Create obstacle
   this->resetBalloon();
+
+  Soundbox::getInstance()->playSoundEffect(Sound::soundtrack);
 }
 
 void GameArea::shoot(Player *player)
