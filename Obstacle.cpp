@@ -19,8 +19,8 @@ Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile,
 
 void Obstacle::move() {
   if (this->speed == 0) return; // cancel calculation if speed is 0
-  int dx = static_cast<int>(this->speed/3 * cos(this->radAngle) * this->invertXMovement);
-  int dy = static_cast<int>(this->speed/3 * sin(this->radAngle) * this->invertYMovement);
+  int dx = static_cast<int>(this->speed/2 * cos(this->radAngle) * this->invertXMovement);
+  int dy = static_cast<int>(this->speed/2 * sin(this->radAngle) * this->invertYMovement);
 
   this->speed--;
   this->x += dx / 2;
