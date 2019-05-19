@@ -44,6 +44,51 @@ GameArea::GameArea(MainWidget *parent) :
   this->setupAnimationThread();
 }
 
+void GameArea::drawScoreBoard(QPainter *p)
+{
+  p->drawImage(this->width() / 2 - 50, -10, *this->scoreBoardImg);
+
+  QFont font;
+  font.setFamily("Viner Hand ITC");
+  font.setPixelSize(40);
+  p->setFont(font);
+  p->setPen(Qt::white);
+
+  p->drawText(this->width() / 2 - 35, 40, QString::number(this->players.at(0)->getScore()));
+  p->drawText(this->width() / 2, 40, ":");
+  p->drawText(this->width() / 2 + 25, 40, QString::number(this->players.at(1)->getScore()));
+}
+
+void GameArea::drawPlayerIndicator(QPainter *p)
+{
+  p->setPen(QPen(Qt::yellow, 5));
+  int indicatorX = players.at(parent->isPlayerTwosTurn())->getX();
+  int indicatorY = players.at(parent->isPlayerTwosTurn())->getY() + players.at(parent->isPlayerTwosTurn())->height() + 10;
+  int indicatorWidth = players.at(parent->isPlayerTwosTurn())->width();
+  p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
+}
+
+void GameArea::drawTrajectory(QPainter *p)
+{
+  p->setPen(QPen(Qt::red, 3));
+  Player *player = this->players.at(parent->isPlayerTwosTurn());
+  double t = 0;
+  int x = player->center().rx();
+  int y = player->center().ry();
+  for (int i = 0; i < 30; i++) {
+    int angle = player->getAngleConverted();
+    int speed = player->getSpeed();
+    const double g = 9.81;
+    double rad = 3.1415926 / 180 * angle;
+    int dx = static_cast<int>(speed / 3 * cos(rad) * t);
+    int dy = static_cast<int>(speed / 3 * sin(rad) * t - (g/2) * pow(t, 2));
+    t += 0.1;
+    x += dx / 2;
+    y -= dy / 2;
+    p->drawPoint(x, y);
+  };
+}
+
 void GameArea::paintEvent(QPaintEvent *event)
 {
   QPainter *p = new QPainter(this);
@@ -52,9 +97,12 @@ void GameArea::paintEvent(QPaintEvent *event)
   p->drawImage(0, 0, *this->backgroundImg);
 
   switch (this->status) {
+  // Start Screen
   case GameStatus::NotStarted :
     p->drawImage(0, 0, *this->startScreenImg);
     break;
+
+  // Game Screen
   case GameStatus::InProgress :
     // Game objects
     for (GameObject *gameObject : this->gameObjects) {
@@ -62,48 +110,17 @@ void GameArea::paintEvent(QPaintEvent *event)
     }
 
     if (this->players.size() == 2) {
-      // Score Board
-      p->drawImage(this->width() / 2 - 50, -10, *this->scoreBoardImg);
-
-      QFont font;
-      font.setFamily("Viner Hand ITC");
-      font.setPixelSize(40);
-      p->setFont(font);
-      p->setPen(Qt::white);
-
-      p->drawText(this->width() / 2 - 35, 40, QString::number(this->players.at(0)->getScore()));
-      p->drawText(this->width() / 2, 40, ":");
-      p->drawText(this->width() / 2 + 25, 40, QString::number(this->players.at(1)->getScore()));
-
-      // Player Indicator
-      p->setPen(QPen(Qt::yellow, 5));
-      int indicatorX = players.at(parent->isPlayerTwosTurn())->getX();
-      int indicatorY = players.at(parent->isPlayerTwosTurn())->getY() + players.at(parent->isPlayerTwosTurn())->height() + 10;
-      int indicatorWidth = players.at(parent->isPlayerTwosTurn())->width();
-      p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
+      drawScoreBoard(p);
+      drawPlayerIndicator(p);
     }
 
     // Shot trajectory
     if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
-      p->setPen(QPen(Qt::red, 3));
-      Player *player = this->players.at(parent->isPlayerTwosTurn());
-      double t = 0;
-      int x = player->center().rx();
-      int y = player->center().ry();
-      for (int i = 0; i < 30; i++) {
-        int angle = player->getAngleConverted();
-        int speed = player->getSpeed();
-        const double g = 9.81;
-        double rad = 3.1415926 / 180 * angle;
-        int dx = static_cast<int>(speed / 3 * cos(rad) * t);
-        int dy = static_cast<int>(speed / 3 * sin(rad) * t - (g/2) * pow(t, 2));
-        t += 0.1;
-        x += dx / 2;
-        y -= dy / 2;
-        p->drawPoint(x, y);
-      };
+      drawTrajectory(p);
     }
     break;
+
+  // Game Over Screen
   case GameStatus::Player1Won :
     p->drawImage(0, 0, *this->player1WonImg);
     break;

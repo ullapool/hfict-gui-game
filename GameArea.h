@@ -63,17 +63,18 @@ private:
   void balloonMissed();
   void opponentHit();
   void goalHit(Goal *goal);
+  void drawScoreBoard(QPainter *p);
+  void drawPlayerIndicator(QPainter *p);
+  void drawShotTrajectory();
+  void drawTrajectory(QPainter *p);
   void next();
 
 // Event Handling
+
 signals:
   void gameFinished();
   void playerToggled();
   void shotStatusChanged(bool active);
-
-public slots:
-
-private slots:
 };
 
 #endif // GAMEAREA_H
