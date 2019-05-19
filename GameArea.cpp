@@ -28,6 +28,14 @@ GameArea::GameArea(MainWidget *parent) :
   this->backgroundImg = new QImage(Constants::imgFolder + Constants::sceneImgFile);
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
 
+  // Load screen images
+  this->startScreenImg = new QImage(Constants::imgFolder + Constants::startScreenImgFile);
+  *this->startScreenImg = this->startScreenImg->scaledToWidth(1000);
+  this->player1WonImg = new QImage(Constants::imgFolder + Constants::player1WonImgFile);
+  *this->player1WonImg = this->player1WonImg->scaledToWidth(1000);
+  this->player2WonImg = new QImage(Constants::imgFolder + Constants::player2WonImgFile);
+  *this->player2WonImg = this->player2WonImg->scaledToWidth(1000);
+
   // Load score board image
   this->scoreBoardImg = new QImage(Constants::imgFolder + Constants::scoreBoardImgFile);
   *this->scoreBoardImg = this->scoreBoardImg->scaledToWidth(Constants::scoreBoardWidth);
@@ -45,7 +53,7 @@ void GameArea::paintEvent(QPaintEvent *event)
 
   switch (this->status) {
   case GameStatus::NotStarted :
-    p->drawText(50, 50, "Click Start to begin!");
+    p->drawImage(0, 0, *this->startScreenImg);
     break;
   case GameStatus::InProgress :
     // Game objects
@@ -96,10 +104,10 @@ void GameArea::paintEvent(QPaintEvent *event)
     }
     break;
   case GameStatus::Player1Won :
-    p->drawText(50, 50, "Player 1 Won!!!");
+    p->drawImage(0, 0, *this->player1WonImg);
     break;
   case GameStatus::Player2Won :
-    p->drawText(50, 50, "Player 2 Won!!!");
+    p->drawImage(0, 0, *this->player2WonImg);
     break;
   }
 

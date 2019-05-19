@@ -6,6 +6,11 @@ QString Constants::imgFolder("C:\\Users\\yanni\\OneDrive\\Dokumente\\dev\\hfict-
 // Scene
 QString Constants::sceneImgFile("scene.png");
 
+// Screens
+QString Constants::startScreenImgFile("startscreen.png");
+QString Constants::player1WonImgFile("pirate1won.png");
+QString Constants::player2WonImgFile("pirate2won.png");
+
 // Obstacle
 int Constants::obstacleWidth = 65;
 QString Constants::obstacleImgFile("balloon2.png");

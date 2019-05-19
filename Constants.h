@@ -9,6 +9,9 @@ class Constants
 public:
   static QString imgFolder;
   static QString sceneImgFile;
+  static QString startScreenImgFile;
+  static QString player1WonImgFile;
+  static QString player2WonImgFile;
   static int obstacleWidth;
   static QString obstacleImgFile;
   static int player1Width;
