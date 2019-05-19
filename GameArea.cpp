@@ -138,7 +138,7 @@ void GameArea::startGame()
 
 void GameArea::shoot(Player *player)
 {
-  this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
+  this->activeShot = new Shot(player->center().rx(), player->center().ry() - 30, player->getSpeed(), player->getAngleConverted());
   this->gameObjects.push_back(this->activeShot);
   emit shotStatusChanged(true);
 }
