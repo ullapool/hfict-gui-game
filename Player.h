@@ -6,14 +6,13 @@
 class Player : public GameObject
 {
 private:
-  bool isPlayerTwo;
+  bool playerTwo;
   int shots;
   int speed;
   int angle;
   int score;
 public:
   Player(int x, int y, bool playerTwo = false);
-  ~Player();
   virtual void move();
   int getShots() const;
   void incrementShots();
@@ -26,6 +25,7 @@ public:
   int getScore() const;
   void incrementScore();
   void resetScore();
+  bool isPlayerTwo() const;
 };
 
 #endif // PLAYER_H

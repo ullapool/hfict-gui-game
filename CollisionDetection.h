@@ -18,7 +18,7 @@ class CollisionDetection
 {
 public:
   CollisionDetection();
-  static bool checkBalloon(GameObject *object1, GameObject *object2);
+  static bool checkHit(GameObject *object1, GameObject *object2);
   static bool checkGoal(Obstacle *balloon, Goal *goal);
   static BoundaryCollision checkBoundary(Obstacle *balloon, GameArea *area);
   static double impactAngle(GameObject *object1, GameObject *object2);

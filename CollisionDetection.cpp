@@ -8,7 +8,7 @@
 
 CollisionDetection::CollisionDetection() {}
 
-bool CollisionDetection::checkBalloon(GameObject *object1, GameObject *object2)
+bool CollisionDetection::checkHit(GameObject *object1, GameObject *object2)
 {
   //qDebug("Collision Check Balloon");
   int distX = abs(object1->center().rx() - object2->center().rx());
@@ -40,7 +40,7 @@ BoundaryCollision CollisionDetection::checkBoundary(Obstacle *balloon, GameArea 
 {
   if (balloon->getSpeed() <= 0) return BoundaryCollision::None;
   if (balloon->center().y() <= 0) return BoundaryCollision::Top;
-  if (balloon->center().y() >= 480) return BoundaryCollision::Bottom;
+  if (balloon->center().y() >= area->height()) return BoundaryCollision::Bottom;
   if (balloon->center().x() <= 0) return BoundaryCollision::Left;
   if (balloon->center().x() >= area->width()) return BoundaryCollision::Right;
   return BoundaryCollision::None;
