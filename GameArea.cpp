@@ -95,8 +95,8 @@ void GameArea::paintEvent(QPaintEvent *event)
         int speed = player->getSpeed();
         const double g = 9.81;
         double rad = 3.1415926 / 180 * angle;
-        int dx = speed/3 * cos(rad) * t;
-        int dy = speed/3 * sin(rad) * t - (g/2) * pow(t, 2);
+        int dx = static_cast<int>(speed / 3 * cos(rad) * t);
+        int dy = static_cast<int>(speed / 3 * sin(rad) * t - (g/2) * pow(t, 2));
         t += 0.1;
         x += dx / 2;
         y -= dy / 2;
@@ -133,7 +133,7 @@ void GameArea::resetBalloon()
   }
 
   int x = this->width() / 2 - Constants::obstacleWidth / 2;
-  int y = rand() % static_cast<int>(this->height() * 0.75);
+  int y = rand() % static_cast<int>(this->height() * 0.8) + static_cast<int>(this->height() * 0.1);
   this->balloon = new Obstacle(x, y);
   this->gameObjects.push_back(this->balloon);
 }
@@ -141,7 +141,7 @@ void GameArea::resetBalloon()
 void GameArea::startGame()
 {
   this->status = GameStatus::InProgress;
-  srand(time(nullptr));
+  srand(static_cast<unsigned int>(time(nullptr)));
 
   // Create goal
   Goal *goal1 = new Goal(-10, 30, false);
