@@ -33,7 +33,6 @@ int Shot::getSpeed()
 
 void Shot::paint(QPainter *painter)
 {
-  qDebug("shot painter");
   painter->translate(this->x + this->img->width()/2, this->y + this->img->height()/2);
   painter->rotate(this->rotation);
   painter->translate(-this->x - this->img->width()/2, -this->y - this->img->height()/2);
