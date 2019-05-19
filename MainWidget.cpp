@@ -6,14 +6,16 @@
 #include <QVBoxLayout>
 #include "soundbox.h"
 
-MainWidget::MainWidget(QWidget *parent) : QWidget(parent) {
+MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
+{
   qDebug("Main Widget");
   this->createLayout();
   this->connectObjects();
   this->setFocusPolicy(Qt::StrongFocus);
 }
 
-void MainWidget::togglePlayer() {
+void MainWidget::togglePlayer()
+{
   qDebug("Toggle Player");
   this->playerTwosTurn = !this->playerTwosTurn;
   Player *activePlayer = this->gameArea->getPlayers().at(this->playerTwosTurn);
@@ -28,18 +30,17 @@ bool MainWidget::isPlayerTwosTurn() const
   return playerTwosTurn;
 }
 
-void MainWidget::createLayout() {
+void MainWidget::createLayout()
+{
   qDebug("Create Layout");
   // Create widgets
-  QLabel *title = new QLabel("<h1>The Gorilla QT Game</h1>");
-  title->setFixedHeight(30);
   this->gameArea = new GameArea(this);
   this->angleInput = new QLineEdit("1");
   this->angleInput->setReadOnly(true);
   this->speedInput = new QLineEdit("1");
   this->speedInput->setReadOnly(true);
   this->angleSlider = new QSlider(Qt::Orientation::Horizontal);
-  this->angleSlider->setMinimum(0);
+  this->angleSlider->setMinimum(-50);
   this->angleSlider->setMaximum(100);
   this->angleSlider->setEnabled(false);
   this->speedSlider = new QSlider(Qt::Orientation::Horizontal);
@@ -72,52 +73,41 @@ void MainWidget::createLayout() {
     }
   }
 
-  layoutMain->addWidget(title);
   layoutMain->addWidget(gameArea);
   layoutMain->addLayout(layoutControls);
 
   this->setLayout(layoutMain);
 }
 
-void MainWidget::connectObjects() {
+void MainWidget::connectObjects()
+{
   qDebug("Connect Objects");
-  connect(this->angleSlider, &QSlider::valueChanged, this,
-          &MainWidget::angleSliderMoved);
-  connect(this->speedSlider, &QSlider::valueChanged, this,
-          &MainWidget::speedSliderMoved);
-  connect(this->actionButton, &QPushButton::clicked, this,
-          &MainWidget::actionButtonClicked);
-  connect(this->gameArea, &GameArea::gameFinished, this,
-          &MainWidget::gameFinished);
-  connect(this->gameArea, &GameArea::playerToggled, this,
-          &MainWidget::togglePlayer);
-  connect(this->gameArea, &GameArea::scored, this, &MainWidget::updateScore);
+  connect(this->angleSlider, &QSlider::valueChanged, this, &MainWidget::angleSliderMoved);
+  connect(this->speedSlider, &QSlider::valueChanged, this, &MainWidget::speedSliderMoved);
+  connect(this->actionButton, &QPushButton::clicked, this, &MainWidget::actionButtonClicked);
+  connect(this->gameArea, &GameArea::gameFinished, this, &MainWidget::gameFinished);
+  connect(this->gameArea, &GameArea::playerToggled, this, &MainWidget::togglePlayer);
   connect(this->gameArea, &GameArea::shotStatusChanged, this->actionButton, &QPushButton::setDisabled);
 
   // Controls Key Binding
   connect(this, &MainWidget::keyPressEnter, this->actionButton,
           &QPushButton::click);
   connect(this, &MainWidget::keyPressUp, [this] {
-    if (this->actionButton->text() == "Shoot")
-      this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
+    if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
   });
   connect(this, &MainWidget::keyPressDown, [this] {
-    if (this->actionButton->text() == "Shoot")
-      this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
+    if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
   connect(this, &MainWidget::keyPressRight, [this] {
-    if (this->actionButton->text() == "Shoot")
-      this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
+    if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
   });
   connect(this, &MainWidget::keyPressLeft, [this] {
-    if (this->actionButton->text() == "Shoot")
-      this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
+    if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
 }
 
-void MainWidget::updateScore() {}
-
-void MainWidget::keyPressEvent(QKeyEvent *event) {
+void MainWidget::keyPressEvent(QKeyEvent *event)
+{
   qDebug() << "Key Press Event:";
   switch (event->key()) {
     case Qt::Key_Up:
@@ -147,17 +137,20 @@ void MainWidget::keyPressEvent(QKeyEvent *event) {
   }
 }
 
-void MainWidget::speedSliderMoved(int value) {
+void MainWidget::speedSliderMoved(int value)
+{
   this->speedInput->setText(QString::number(value));
   this->gameArea->getPlayers().at(this->playerTwosTurn)->setSpeed(value);
 }
 
-void MainWidget::angleSliderMoved(int value) {
+void MainWidget::angleSliderMoved(int value)
+{
   this->angleInput->setText(QString::number(value));
   this->gameArea->getPlayers().at(this->playerTwosTurn)->setAngle(value);
 }
 
-void MainWidget::actionButtonClicked() {
+void MainWidget::actionButtonClicked()
+{
   if (this->actionButton->text() == "Start") {
     qDebug("Starting game");
     this->actionButton->setText("Shoot");
@@ -173,17 +166,14 @@ void MainWidget::actionButtonClicked() {
     this->numberOfShotsInput->setText(QString::number(shots));
     this->gameArea->shoot(player);
 
-    // sounds
-
+    // Sounds
     Soundbox::getInstance()->playSoundEffect(Sound::shootingJukbox);
-
-
   }
 }
 
-void MainWidget::gameFinished() {
+void MainWidget::gameFinished()
+{
   qDebug("Game Finished");
   this->actionButton->setText("Start");
   this->numberOfShotsInput->setText("");
-  this->gameArea->reset();
 }

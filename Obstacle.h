@@ -2,23 +2,23 @@
 #define OBSTACLE_H
 #include "GameObject.h"
 
+enum class BoundaryCollision;
 
-class Obstacle : public GameObject {
+class Obstacle : public GameObject
+{
  private:
   int speed;
   double radAngle;
   double t;
   int invertXMovement;
   int invertYMovement;
-  void toggleXMovement();
-  void toggleYMovement();
 
- public:
+public:
   Obstacle(int x, int y);
   virtual void move();
-  virtual void impulse(int boundary);
   virtual void impulse(int speed, double radAngle);
-  int getSpeed() const;
+  virtual void impulse(BoundaryCollision);
+  virtual int getSpeed() const;
 };
 
 #endif  // OBSTACLE_H

@@ -1,4 +1,6 @@
 build-Debug
+build-Release
+resources
 .vscode
 *.autosave
 game.pro.user

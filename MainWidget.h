@@ -44,7 +44,6 @@ private:
   // Methods
   void createLayout();
   void connectObjects();
-  void updateScore();
   void keyPressEvent(QKeyEvent *event);
 
 
@@ -61,9 +60,6 @@ public slots:
   void angleSliderMoved(int value);
   void actionButtonClicked();
   void gameFinished();
-
-private slots:
-
 };
 
 #endif // MAINWIDGET_H
