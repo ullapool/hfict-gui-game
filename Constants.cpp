@@ -12,8 +12,8 @@ QString Constants::player1WonImgFile("pirate1won.png");
 QString Constants::player2WonImgFile("pirate2won.png");
 
 // Obstacle
-int Constants::obstacleWidth = 65;
-QString Constants::obstacleImgFile("balloon2.png");
+int Constants::obstacleWidth = 75;
+QString Constants::obstacleImgFile("parrot.png");
 
 // Player 1
 int Constants::player1Width = 85;
