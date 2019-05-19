@@ -39,14 +39,15 @@ GameArea::GameArea(MainWidget *parent) :
 void GameArea::paintEvent(QPaintEvent *event)
 {
   QPainter *p = new QPainter(this);
+
+  // Background
+  p->drawImage(0, 0, *this->backgroundImg);
+
   switch (this->status) {
   case GameStatus::NotStarted :
     p->drawText(50, 50, "Click Start to begin!");
     break;
   case GameStatus::InProgress :
-    // Background
-    p->drawImage(0, 0, *this->backgroundImg);
-
     // Game objects
     for (GameObject *gameObject : this->gameObjects) {
       gameObject->paint(p);
