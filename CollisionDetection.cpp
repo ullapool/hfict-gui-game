@@ -37,7 +37,7 @@ bool CollisionDetection::checkGoal(Obstacle *balloon, Goal *goal)
                 balloon->center().rx() > goal->center().rx() :
                 balloon->center().rx() < goal->center().rx();
 
-   return hitY && hitX;
+  return hitY && hitX;
 }
 
 int CollisionDetection::checkBoundary(Obstacle *balloon, GameArea *area)

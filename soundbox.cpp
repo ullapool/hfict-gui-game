@@ -9,18 +9,18 @@
 
 Soundbox::Soundbox()
 {
-  shootingJukbox.push_back(shooting = "bam.mp3");
-  shootingJukbox.push_back(shooting_2 = "boom.mp3");
-  shootingJukbox.push_back(shooting_3 = "gonnagetya.mp3");
+  shootingJukbox.push_back("bam.mp3");
+  shootingJukbox.push_back("boom.mp3");
+  shootingJukbox.push_back("gonnagetya.mp3");
 
-  ballonStriked.push_back(opponentStriked = "yaFucker.mp3");
-  ballonStriked.push_back(opponentStriked_2 = "fanny.mp3");
-  ballonStriked.push_back(opponentStriked_3 = "bastard.mp3");
-  ballonStriked.push_back( strike = "juhu.mp3");
-  ballonStriked.push_back(strike_2 = "wohoo.mp3");
+  ballonStriked.push_back("yaFucker.mp3");
+  ballonStriked.push_back("fanny.mp3");
+  ballonStriked.push_back("bastard.mp3");
+  ballonStriked.push_back("juhu.mp3");
+  ballonStriked.push_back("wohoo.mp3");
 
-  opponentHit.push_back(shootOpponent = "stoppit.mp3");
-  opponentHit.push_back(shootOpponent_2 = "stoppityadick.mp3");
+  opponentHit.push_back("stoppit.mp3");
+  opponentHit.push_back("stoppityadick.mp3");
 
   soundtrack = "pirate.mp3";
   goalCheering = "goal.mp3";
