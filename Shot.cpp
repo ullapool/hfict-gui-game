@@ -6,10 +6,12 @@ Shot::Shot(int x, int y, int speed, int angle) : GameObject (x, y, Constants::sh
 {
   this->speed = speed;
   this->angle = angle;
+  this->rotation = 0;
   this->t = 0;
 }
 
 void Shot::move() {
+  this->rotation += 30;
   const double g = 9.81;
   double rad = 3.1415926 / 180 * this->angle;
   int dx = this->speed/3 * cos(rad) * t;
@@ -24,7 +26,14 @@ int Shot::getSpeed()
   return this->speed;
 }
 
-bool Shot::isVisible(int x, int y)
+void Shot::paint(QPainter *painter)
 {
-
+  qDebug("shot painter");
+  painter->translate(this->x + this->img->width()/2, this->y + this->img->height()/2);
+  painter->rotate(this->rotation);
+  painter->translate(-this->x - this->img->width()/2, -this->y - this->img->height()/2);
+  painter->drawImage(this->x, this->y, *this->img);
+  painter->translate(this->x + this->img->width()/2, this->y + this->img->height()/2);
+  painter->rotate(-this->rotation);
+  painter->translate(-this->x - this->img->width()/2, -this->y - this->img->height()/2);
 }
