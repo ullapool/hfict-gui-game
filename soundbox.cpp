@@ -6,6 +6,7 @@
 #include <QString>
 #include <QtMultimedia/QMediaPlayer>
 #include <QDebug>
+#include <QSound>
 
 Soundbox::Soundbox()
 {
@@ -26,9 +27,14 @@ Soundbox::Soundbox()
   goalCheering = "goal.mp3";
 
   musicPlayer = new QMediaPlayer();
-  soundtrackPlayer = new QMediaPlayer();
-  this->soundtrackPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + soundtrack));
+
+  soundtrackPlayer = new QSound(Constants::soundFolder + soundtrack);
+  this->soundtrackPlayer->setLoops(4);
   this->soundtrackPlayer->play();
+//  musicPlayer = new QMediaPlayer();
+//  soundtrackPlayer = new QMediaPlayer();
+//  this->soundtrackPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + soundtrack));
+//  this->soundtrackPlayer->play();
 }
 
 Soundbox *Soundbox::instance = nullptr;
@@ -60,10 +66,6 @@ void Soundbox::playSoundEffect(Sound sound)
         break;
     case Sound::goalCheering :
         s = goalCheering;
-        break;
-
-    case Sound::soundtrack :
-        m = soundtrack;
         break;
 }
 
