@@ -66,6 +66,7 @@ void GameArea::paintEvent(QPaintEvent *event)
       p->drawImage(this->width() / 2 - 50, -10, *this->scoreBoardImg);
 
       QFont font;
+      font.setFamily("Viner Hand ITC");
       font.setPixelSize(40);
       p->setFont(font);
       p->setPen(Qt::white);
