@@ -43,8 +43,10 @@ bool CollisionDetection::checkGoal(Obstacle *balloon, Goal *goal)
 int CollisionDetection::checkBoundary(Obstacle *balloon, GameArea *area)
 {
   if (balloon->getSpeed() <= 0) return CollisionDetection::boundaryNone;
-  if (balloon->center().y() <= 0 || balloon->center().y() >= 480) return CollisionDetection::boundaryHorizontal;
-  if (balloon->center().x() <= 0 || balloon->center().x() >= area->width()) return CollisionDetection::boundaryVertical;
+  if (balloon->center().y() <= 0 + balloon->radius() ||
+      balloon->center().y() >= area->height() - balloon->radius()) return CollisionDetection::boundaryHorizontal;
+  if (balloon->center().x() <= 0 + balloon->radius() ||
+      balloon->center().x() >= area->width() - balloon->radius()) return CollisionDetection::boundaryVertical;
   return CollisionDetection::boundaryNone;
 }
 

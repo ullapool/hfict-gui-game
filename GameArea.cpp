@@ -131,6 +131,7 @@ void GameArea::startGame()
   this->gameObjects.push_back(player2);
   this->players.push_back(player1);
   this->players.push_back(player2);
+  emit this->playerToggled();
   if (rand() % 2) emit this->playerToggled();
 
   // Create obstacle
