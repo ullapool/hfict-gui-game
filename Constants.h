@@ -8,6 +8,7 @@ class Constants
 {
 public:
   static QString imgFolder;
+  static QString sceneImgFile;
   static int obstacleWidth;
   static QString obstacleImgFile;
   static int player1Width;
@@ -16,8 +17,12 @@ public:
   static QString player2ImgFile;
   static int shotWidth;
   static QString shotImgFile;
+  static int goal1Width;
   static QString goal1ImgFile;
+  static int goal2Width;
   static QString goal2ImgFile;
+  static int scoreBoardWidth;
+  static QString scoreBoardImgFile;
   static bool showTrajectory;
   static int targetScore;
 };
