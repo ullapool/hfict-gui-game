@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::setupLayout()
 {
   // Setup window properties
-  this->setWindowTitle("The Gorilla Game");
+  this->setWindowTitle("The Pirate Game");
   this->setFixedSize(1000, 580);
 
   // Setup main widget
