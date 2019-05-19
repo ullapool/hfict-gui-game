@@ -176,7 +176,7 @@ std::vector<Player *> GameArea::getPlayers() const
 void GameArea::balloonHit()
 {
   qDebug("Balloon hit");
-  Soundbox::playSoundEffect(Soundbox::strike);
+  Soundbox::getInstance()->playSoundEffect(Sound::ballonStriked);
   // Get impact angle
   double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
 
@@ -199,7 +199,7 @@ void GameArea::goalHit(Goal *goal)
 {
 
   qDebug("GOOOAAAAL");
-  Soundbox::playSoundEffect(Soundbox::goalCheering);
+  Soundbox::getInstance()->playSoundEffect(Sound::goalCheering);
   unsigned int scoringPlayer = !goal->isGoalTwo();
   this->players.at(scoringPlayer)->incrementScore();
   qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();

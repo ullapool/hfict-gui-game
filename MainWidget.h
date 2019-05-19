@@ -8,6 +8,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include "GameArea.h"
+enum class Sound;
 
 
 class MainWidget : public QWidget

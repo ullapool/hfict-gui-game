@@ -175,7 +175,7 @@ void MainWidget::actionButtonClicked() {
 
     // sounds
 
-    Soundbox::playSoundEffect(Soundbox::shooting);
+    Soundbox::getInstance()->playSoundEffect(Sound::shootingJukbox);
 
 
   }

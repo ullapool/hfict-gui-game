@@ -6,28 +6,38 @@
 
 #include <QtMultimedia/QMediaPlayer>
 
+enum class Sound {
+    shootingJukbox,
+    ballonStriked,
+    opponentHit,
+    goalCheering,
+};
 
 class Soundbox
 {
-public:
+private:
     Soundbox();
+    static Soundbox *instance;
+public:
     //Sounds
-    static QString shooting;
-    static QString shooting_2;
-    static QString shooting_3;
-    static QString opponentStriked;
-    static QString opponentStriked_2;
-    static QString opponentStriked_3;
-    static QString strike;
-    static QString strike_2;
-    static QString shootOpponent;
-    static QString shootOpponent_2;
+    QMediaPlayer *musicPlayer;
+    QVector<QString> shootingJukbox;
+    QVector<QString> ballonStriked;
+    QVector<QString> opponentHit;
+     QString shooting;
+     QString shooting_2;
+     QString shooting_3;
+     QString opponentStriked;
+     QString opponentStriked_2;
+    QString opponentStriked_3;
+     QString strike;
+     QString strike_2;
+     QString shootOpponent;
+     QString shootOpponent_2;
+     QString goalCheering;
 
-    static QString goalCheering;
-
-
-
-    static void playSoundEffect(QString sound);
+    static Soundbox *getInstance();
+    void playSoundEffect(Sound sound);
 
 
 };
