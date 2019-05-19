@@ -2,16 +2,21 @@
 #include <cmath>
 #include "Constants.h"
 
-Shot::Shot(int x, int y, int speed, int angle) : GameObject (x, y, Constants::shotImgFile, Constants::shotWidth)
+Shot::Shot(int x, int y, int speed, int angle, int player) : GameObject (x, y, Constants::shotImgFile, Constants::shotWidth)
 {
   this->speed = speed;
   this->angle = angle;
   this->rotation = 0;
+  this->player = player;
   this->t = 0;
 }
 
 void Shot::move() {
-  this->rotation += 30;
+  if (this->player == 0) {
+    this->rotation += 30;
+  } else {
+    this->rotation -= 30;
+  }
   const double g = 9.81;
   double rad = 3.1415926 / 180 * this->angle;
   int dx = this->speed/3 * cos(rad) * t;
