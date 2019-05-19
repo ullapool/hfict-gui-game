@@ -37,6 +37,7 @@ private:
   // Properties
   MainWidget *parent;
   QImage *backgroundImg;
+  QImage *scoreBoardImg;
   std::vector<GameObject*> gameObjects;
   std::vector<Shot*> shots;
   Shot *activeShot;

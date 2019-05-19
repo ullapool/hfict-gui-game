@@ -56,7 +56,7 @@ void Player::resetScore()
   this->score = 0;
 }
 
-Player::Player(int x, int y, bool playerTwo) : isPlayerTwo(playerTwo), shots(0), speed(0), angle(0), score(0)
+Player::Player(int x, int y, bool playerTwo) : isPlayerTwo(playerTwo), shots(0), speed(50), angle(50), score(0)
 {
   QString imgPath = Constants::imgFolder;
   imgPath += this->isPlayerTwo ? Constants::player2ImgFile : Constants::player1ImgFile;

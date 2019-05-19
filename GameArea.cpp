@@ -20,9 +20,12 @@ GameArea::GameArea(MainWidget *parent) : QWidget(parent), parent(parent), active
   qDebug("Game Area");
 
   // Load background image
-  this->backgroundImg = new QImage(Constants::imgFolder + "background.jpg");
+  this->backgroundImg = new QImage(Constants::imgFolder + Constants::sceneImgFile);
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
 
+  // Load score board image
+  this->scoreBoardImg = new QImage(Constants::imgFolder + Constants::scoreBoardImgFile);
+  *this->scoreBoardImg = this->scoreBoardImg->scaledToWidth(Constants::scoreBoardWidth);
 
   // Setup animation thread
   this->setupAnimationThread();
@@ -43,9 +46,7 @@ void GameArea::paintEvent(QPaintEvent *event)
 
   if (this->players.size() == 2) {
     // Score Board
-    p->setBrush(QBrush(Qt::gray));
-    p->setPen(Qt::gray);
-    p->drawRect(this->width() / 2 - 50, 0, 110, 50);
+    p->drawImage(this->width() / 2 - 50, -10, *this->scoreBoardImg);
 
     QFont font;
     font.setPixelSize(40);
@@ -115,22 +116,23 @@ void GameArea::startGame()
 {
   srand(time(nullptr));
 
-  // Create player
-  Player *player1 = new Player(5, 370, false);
-  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 370, true);
-  this->gameObjects.push_back(player1);
-  this->gameObjects.push_back(player2);
-  this->players.push_back(player1);
-  this->players.push_back(player2);
-  if (rand() % 2) emit this->playerToggled();
-
   // Create goal
-  Goal *goal1 = new Goal(20, 30, false);
-  Goal *goal2 = new Goal(this->width() - 80, 30, true);
+  Goal *goal1 = new Goal(-10, 30, false);
+  Goal *goal2 = new Goal(this->width() - Constants::goal2Width + 10, 30, true);
   this->gameObjects.push_back(goal1);
   this->gameObjects.push_back(goal2);
   this->goals.push_back(goal1);
   this->goals.push_back(goal2);
+
+  // Create player
+  Player *player1 = new Player(5, 340, false);
+  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 340, true);
+  this->gameObjects.push_back(player1);
+  this->gameObjects.push_back(player2);
+  this->players.push_back(player1);
+  this->players.push_back(player2);
+  emit this->playerToggled();
+  if (rand() % 2) emit this->playerToggled();
 
   // Create obstacle
   this->resetBalloon();
@@ -138,7 +140,7 @@ void GameArea::startGame()
 
 void GameArea::shoot(Player *player)
 {
-  this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
+  this->activeShot = new Shot(player->center().rx(), player->center().ry() - 30, player->getSpeed(), player->getAngleConverted());
   this->gameObjects.push_back(this->activeShot);
   emit shotStatusChanged(true);
 }

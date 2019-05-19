@@ -33,15 +33,13 @@ void MainWidget::createLayout()
 {
   qDebug("Create Layout");
   // Create widgets
-  QLabel *title = new QLabel("<h1>The Gorilla QT Game</h1>");
-  title->setFixedHeight(30);
   this->gameArea = new GameArea(this);
   this->angleInput = new QLineEdit("1");
   this->angleInput->setReadOnly(true);
   this->speedInput = new QLineEdit("1");
   this->speedInput->setReadOnly(true);
   this->angleSlider = new QSlider(Qt::Orientation::Horizontal);
-  this->angleSlider->setMinimum(0);
+  this->angleSlider->setMinimum(-50);
   this->angleSlider->setMaximum(100);
   this->angleSlider->setEnabled(false);
   this->speedSlider = new QSlider(Qt::Orientation::Horizontal);
@@ -77,7 +75,6 @@ void MainWidget::createLayout()
     }
   }
 
-  layoutMain->addWidget(title);
   layoutMain->addWidget(gameArea);
   layoutMain->addLayout(layoutControls);
 
