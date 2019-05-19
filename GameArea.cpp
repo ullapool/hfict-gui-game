@@ -20,7 +20,7 @@ GameArea::GameArea(MainWidget *parent) : QWidget(parent), parent(parent), active
   qDebug("Game Area");
 
   // Load background image
-  this->backgroundImg = new QImage(Constants::imgFolder + "background.jpg");
+  this->backgroundImg = new QImage(Constants::imgFolder + Constants::sceneImgFile);
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
 
 
@@ -115,22 +115,22 @@ void GameArea::startGame()
 {
   srand(time(nullptr));
 
+  // Create goal
+  Goal *goal1 = new Goal(-10, 30, false);
+  Goal *goal2 = new Goal(this->width() - Constants::goal2Width + 10, 30, true);
+  this->gameObjects.push_back(goal1);
+  this->gameObjects.push_back(goal2);
+  this->goals.push_back(goal1);
+  this->goals.push_back(goal2);
+
   // Create player
-  Player *player1 = new Player(5, 370, false);
-  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 370, true);
+  Player *player1 = new Player(5, 340, false);
+  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 340, true);
   this->gameObjects.push_back(player1);
   this->gameObjects.push_back(player2);
   this->players.push_back(player1);
   this->players.push_back(player2);
   if (rand() % 2) emit this->playerToggled();
-
-  // Create goal
-  Goal *goal1 = new Goal(20, 30, false);
-  Goal *goal2 = new Goal(this->width() - 80, 30, true);
-  this->gameObjects.push_back(goal1);
-  this->gameObjects.push_back(goal2);
-  this->goals.push_back(goal1);
-  this->goals.push_back(goal2);
 
   // Create obstacle
   this->resetBalloon();
