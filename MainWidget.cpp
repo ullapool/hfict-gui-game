@@ -39,7 +39,7 @@ void MainWidget::createLayout()
   this->speedInput = new QLineEdit("1");
   this->speedInput->setReadOnly(true);
   this->angleSlider = new QSlider(Qt::Orientation::Horizontal);
-  this->angleSlider->setMinimum(0);
+  this->angleSlider->setMinimum(-50);
   this->angleSlider->setMaximum(100);
   this->angleSlider->setEnabled(false);
   this->speedSlider = new QSlider(Qt::Orientation::Horizontal);
