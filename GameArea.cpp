@@ -23,6 +23,9 @@ GameArea::GameArea(MainWidget *parent) : QWidget(parent), parent(parent), active
   this->backgroundImg = new QImage(Constants::imgFolder + Constants::sceneImgFile);
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
 
+  // Load score board image
+  this->scoreBoardImg = new QImage(Constants::imgFolder + Constants::scoreBoardImgFile);
+  *this->scoreBoardImg = this->scoreBoardImg->scaledToWidth(Constants::scoreBoardWidth);
 
   // Setup animation thread
   this->setupAnimationThread();
@@ -43,9 +46,7 @@ void GameArea::paintEvent(QPaintEvent *event)
 
   if (this->players.size() == 2) {
     // Score Board
-    p->setBrush(QBrush(Qt::gray));
-    p->setPen(Qt::gray);
-    p->drawRect(this->width() / 2 - 50, 0, 110, 50);
+    p->drawImage(this->width() / 2 - 50, -10, *this->scoreBoardImg);
 
     QFont font;
     font.setPixelSize(40);

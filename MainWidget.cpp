@@ -33,8 +33,6 @@ void MainWidget::createLayout()
 {
   qDebug("Create Layout");
   // Create widgets
-  QLabel *title = new QLabel("<h1>The Gorilla QT Game</h1>");
-  title->setFixedHeight(30);
   this->gameArea = new GameArea(this);
   this->angleInput = new QLineEdit("1");
   this->angleInput->setReadOnly(true);
@@ -77,7 +75,6 @@ void MainWidget::createLayout()
     }
   }
 
-  layoutMain->addWidget(title);
   layoutMain->addWidget(gameArea);
   layoutMain->addLayout(layoutControls);
 

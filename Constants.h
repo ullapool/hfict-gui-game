@@ -21,6 +21,8 @@ public:
   static QString goal1ImgFile;
   static int goal2Width;
   static QString goal2ImgFile;
+  static int scoreBoardWidth;
+  static QString scoreBoardImgFile;
   static bool showTrajectory;
 };
 
