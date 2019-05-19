@@ -2,7 +2,7 @@
 #define SOUNDBOX_H
 #include <QSound>
 #include "GameObject.h"
-
+#include <QMediaPlaylist>
 #include <QtMultimedia/QMediaPlayer>
 
 enum class Sound {
@@ -21,22 +21,13 @@ private:
 public:
     //Sounds
     QMediaPlayer *musicPlayer;
-    QSound *soundtrackPlayer;
+    QMediaPlayer *soundtrackPlayer;
+    QMediaPlaylist *playList;
     QVector<QString> shootingJukbox;
     QVector<QString> ballonStriked;
     QVector<QString> opponentHit;
     QString soundtrack;
-//    QString shooting;
-//    QString shooting_2;
-//    QString shooting_3;
-//    QString opponentStriked;
-//    QString opponentStriked_2;
-//    QString opponentStriked_3;
-//    QString strike;
-//    QString strike_2;
-//    QString shootOpponent;
-//    QString shootOpponent_2;
-      QString goalCheering;
+    QString goalCheering;
 
     static Soundbox *getInstance();
     void playSoundEffect(Sound sound);

@@ -165,7 +165,8 @@ void GameArea::startGame()
   // Create obstacle
   this->resetBalloon();
 
-  Soundbox::getInstance(); //->playSoundEffect(Sound::soundtrack);
+  //Start Soundtrack
+  Soundbox::getInstance();
 }
 
 void GameArea::shoot(Player *player)
@@ -230,7 +231,7 @@ void GameArea::opponentHit()
 {
   qDebug("Opponent Hit");
   this->removeShot();
-  // play sound here
+  Soundbox::getInstance()->playSoundEffect(Sound::opponentHit);
 }
 
 void GameArea::goalHit(Goal *goal)

@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QString>
 #include <QtMultimedia/QMediaPlayer>
+#include <QMediaPlaylist>
 #include <QDebug>
 #include <QSound>
 
@@ -14,9 +15,10 @@ Soundbox::Soundbox()
   shootingJukbox.push_back("boom.mp3");
   shootingJukbox.push_back("gonnagetya.mp3");
 
-  ballonStriked.push_back("yaFucker.mp3");
-  ballonStriked.push_back("fanny.mp3");
-  ballonStriked.push_back("bastard.mp3");
+  //ballonStriked.push_back("yaFucker.mp3");
+  //ballonStriked.push_back("fanny.mp3");
+  //ballonStriked.push_back("bastard.mp3");
+  ballonStriked.push_back("parrot.mp3");
   ballonStriked.push_back("juhu.mp3");
   ballonStriked.push_back("wohoo.mp3");
 
@@ -26,15 +28,15 @@ Soundbox::Soundbox()
   soundtrack = "pirate.mp3";
   goalCheering = "goal.mp3";
 
-  musicPlayer = new QMediaPlayer();
+  musicPlayer = new QMediaPlayer;
 
-  soundtrackPlayer = new QSound(Constants::soundFolder + soundtrack);
-  this->soundtrackPlayer->setLoops(4);
+  playList = new QMediaPlaylist;
+  this->playList->addMedia(QUrl::fromLocalFile(Constants::soundFolder + soundtrack));
+  this->playList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+
+  soundtrackPlayer = new QMediaPlayer;
+  this->soundtrackPlayer->setPlaylist(playList);
   this->soundtrackPlayer->play();
-//  musicPlayer = new QMediaPlayer();
-//  soundtrackPlayer = new QMediaPlayer();
-//  this->soundtrackPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + soundtrack));
-//  this->soundtrackPlayer->play();
 }
 
 Soundbox *Soundbox::instance = nullptr;
@@ -59,7 +61,7 @@ void Soundbox::playSoundEffect(Sound sound)
         break;
 
     case Sound::opponentHit :
-        s = opponentHit.at(rand() & opponentHit.size() );
+        s = opponentHit.at(rand() % opponentHit.size() );
         break;
     case Sound::ballonStriked :
          s = ballonStriked.at(rand() % ballonStriked.size() );
