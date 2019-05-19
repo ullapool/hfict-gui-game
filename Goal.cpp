@@ -17,8 +17,4 @@ Goal::Goal(int x, int y, bool goalTwo) : goalTwo(goalTwo)
   *this->img = this->img->scaledToWidth(imgWidth);
 }
 
-Goal::~Goal() {
-  delete this->img;
-}
-
 void Goal::move() {}

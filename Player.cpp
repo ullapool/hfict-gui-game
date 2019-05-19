@@ -33,7 +33,7 @@ int Player::getAngle() const
 
 int Player::getAngleConverted() const
 {
-  return this->isPlayerTwo ? 180 - this->angle : this->angle;
+  return this->playerTwo ? 180 - this->angle : this->angle;
 }
 
 void Player::setAngle(int value)
@@ -56,19 +56,20 @@ void Player::resetScore()
   this->score = 0;
 }
 
-Player::Player(int x, int y, bool playerTwo) : isPlayerTwo(playerTwo), shots(0), speed(50), angle(50), score(0)
+bool Player::isPlayerTwo() const
+{
+  return playerTwo;
+}
+
+Player::Player(int x, int y, bool playerTwo) : playerTwo(playerTwo), shots(0), speed(50), angle(50), score(0)
 {
   QString imgPath = Constants::imgFolder;
-  imgPath += this->isPlayerTwo ? Constants::player2ImgFile : Constants::player1ImgFile;
-  int imgWidth = this->isPlayerTwo ? Constants::player2Width : Constants::player1Width;
+  imgPath += this->playerTwo ? Constants::player2ImgFile : Constants::player1ImgFile;
+  int imgWidth = this->playerTwo ? Constants::player2Width : Constants::player1Width;
   this->x = x;
   this->y = y;
   this->img = new QImage(imgPath);
   *this->img = this->img->scaledToWidth(imgWidth);
-}
-
-Player::~Player() {
-  delete this->img;
 }
 
 void Player::move() {}

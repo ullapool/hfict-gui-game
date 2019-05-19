@@ -42,7 +42,6 @@ private:
   // Methods
   void createLayout();
   void connectObjects();
-  void updateScore();
   void keyPressEvent(QKeyEvent *event);
 
 
