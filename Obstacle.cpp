@@ -9,18 +9,6 @@ int Obstacle::getSpeed() const
     return speed;
 }
 
-void Obstacle::toggleXMovement()
-{
-  // qDebug("Toggle X Movement");
-  this->invertXMovement *= -1;
-}
-
-void Obstacle::toggleYMovement()
-{
-  // qDebug("Toggle Y Movement");
-  this->invertYMovement *= -1;
-}
-
 Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile, Constants::obstacleWidth) {
   this->speed = 0;
   this->radAngle = 0;
@@ -30,19 +18,37 @@ Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile,
 }
 
 void Obstacle::move() {
-  int dx = this->speed/3 * cos(this->radAngle) * this->invertXMovement;
-  int dy = this->speed/3 * sin(this->radAngle) * this->invertYMovement;
+  if (this->speed == 0) return; // cancel calculation if speed is 0
+  int dx = static_cast<int>(this->speed/3 * cos(this->radAngle) * this->invertXMovement);
+  int dy = static_cast<int>(this->speed/3 * sin(this->radAngle) * this->invertYMovement);
 
-  this->speed = this->speed <= 0 ? 0 : this->speed - 1;
+  this->speed--;
   this->x += dx / 2;
   this->y -= dy / 2;
 }
 
-void Obstacle::impulse(int boundary)
+void Obstacle::impulse(BoundaryCollision boundary)
 {
-  // removeShot must be triggered later!!!
-  if (boundary == CollisionDetection::boundaryVertical) this->toggleXMovement();
-  if (boundary == CollisionDetection::boundaryHorizontal) this->toggleYMovement();
+   // adding / removing 5px is a quick & dirty workaround preventing ballon from getting stuck at boundary
+  switch (boundary) {
+    case BoundaryCollision::None : break;
+    case BoundaryCollision::Top :
+      this->y += 5;
+      this->invertYMovement *= -1;
+      break;
+    case BoundaryCollision::Bottom :
+      this->y -= 5;
+      this->invertYMovement *= -1;
+      break;
+    case BoundaryCollision::Left :
+      this->x += 5;
+      this->invertXMovement *= -1;
+      break;
+    case BoundaryCollision::Right :
+      this->x -= 5;
+      this->invertXMovement *= -1;
+      break;
+  }
 }
 
 void Obstacle::impulse(int speed, double radAngle)

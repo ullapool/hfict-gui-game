@@ -262,8 +262,7 @@ void GameArea::next()
   }
 
   // Check boundary hit
-  int boundaryCollision = this->balloon ? CollisionDetection::checkBoundary(this->balloon, this) : 0;
-  if (boundaryCollision) this->balloon->impulse(boundaryCollision);
+  if (this->balloon) this->balloon->impulse(CollisionDetection::checkBoundary(this->balloon, this));
 
   // Check opponent hit
   if (this->activeShot && this->players.size() == 2 && CollisionDetection::checkHit(this->players.at(!parent->isPlayerTwosTurn()), this->activeShot)) this->opponentHit();
