@@ -8,7 +8,8 @@ enum class Sound {
     shootingJukboxPlayerOne,
     shootingJukeboxPlayerTwo,
     ballonStriked,
-    opponentHit,
+    opponentOnetHit,
+    opponentTwoHit,
     goalCheering,
 };
 
@@ -25,7 +26,8 @@ public:
     QVector<QString> playerOneShootingJukbox;
     QVector<QString> playerTwoShootingJukbox;
     QVector<QString> ballonStriked;
-    QVector<QString> opponentHit;
+    QVector<QString> opponentOneHit;
+    QVector<QString> opponentTwoHit;
     QString soundtrack;
     QString goalCheering;
 

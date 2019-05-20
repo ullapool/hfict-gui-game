@@ -27,11 +27,14 @@ Soundbox::Soundbox()
   ballonStriked.push_back("juhu.mp3");
   ballonStriked.push_back("wohoo.mp3");
 
-  opponentHit.push_back("sharks.mp3");
-  opponentHit.push_back("rum.mp3");
-  opponentHit.push_back("liver.mp3");
-  opponentHit.push_back("aye.mp3");
-  opponentHit.push_back("stoppityadick.mp3");
+  opponentTwoHit.push_back("sharks.mp3");
+  opponentTwoHit.push_back("rum.mp3");
+  opponentTwoHit.push_back("liver.mp3");
+  opponentTwoHit.push_back("aye.mp3");
+
+  opponentOneHit.push_back("bastard.mp3");
+  opponentOneHit.push_back("yaFucker.mp3");
+  opponentOneHit.push_back("stoppityadick.mp3");
   //opponentHit.push_back("stoppit.mp3");
 
   soundtrack = "pirate.mp3";
@@ -71,8 +74,11 @@ void Soundbox::playSoundEffect(Sound sound)
     case Sound::shootingJukeboxPlayerTwo :
         s = playerTwoShootingJukbox.at(rand() % playerTwoShootingJukbox.size() );
         break;
-    case Sound::opponentHit :
-        s = opponentHit.at(rand() % opponentHit.size() );
+    case Sound::opponentOnetHit :
+        s = opponentOneHit.at(rand() % opponentOneHit.size() );
+        break;
+    case Sound::opponentTwoHit :
+        s = opponentTwoHit.at(rand() % opponentTwoHit.size() );
         break;
     case Sound::ballonStriked :
         s = ballonStriked.at(rand() % ballonStriked.size() );

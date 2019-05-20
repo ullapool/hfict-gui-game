@@ -228,7 +228,13 @@ void GameArea::opponentHit()
 {
   qDebug("Opponent Hit");
   this->removeShot();
-  Soundbox::getInstance()->playSoundEffect(Sound::opponentHit);
+  if(parent->isPlayerTwosTurn()) {
+  Soundbox::getInstance()->playSoundEffect(Sound::opponentTwoHit);
+  }
+  else {
+      Soundbox::getInstance()->playSoundEffect(Sound::opponentOnetHit);
+  }
+
 
 }
 
