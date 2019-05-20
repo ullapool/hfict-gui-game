@@ -12,6 +12,8 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
   this->createLayout();
   this->connectObjects();
   this->setFocusPolicy(Qt::StrongFocus);
+  //begin Soundtrack
+  Soundbox::getInstance();
 }
 
 void MainWidget::togglePlayer()
@@ -167,7 +169,12 @@ void MainWidget::actionButtonClicked()
     this->gameArea->shoot(player);
 
     // Sounds
-    Soundbox::getInstance()->playSoundEffect(Sound::shootingJukbox);
+    if(playerTwosTurn){
+    Soundbox::getInstance()->playSoundEffect(Sound::shootingJukeboxPlayerTwo);
+    }
+    else {
+      Soundbox::getInstance()->playSoundEffect(Sound::shootingJukboxPlayerOne);
+    }
   }
 }
 

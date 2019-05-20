@@ -57,7 +57,7 @@ void Player::resetScore()
 }
 
 bool Player::isPlayerTwo() const
-{
+{ 
   return playerTwo;
 }
 

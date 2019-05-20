@@ -1,16 +1,15 @@
 #ifndef SOUNDBOX_H
 #define SOUNDBOX_H
-#include <QSound>
 #include "GameObject.h"
 #include <QMediaPlaylist>
 #include <QtMultimedia/QMediaPlayer>
 
 enum class Sound {
-    shootingJukbox,
+    shootingJukboxPlayerOne,
+    shootingJukeboxPlayerTwo,
     ballonStriked,
     opponentHit,
     goalCheering,
-    //soundtrack,
 };
 
 class Soundbox
@@ -18,12 +17,13 @@ class Soundbox
 private:
     Soundbox();
     static Soundbox *instance;
+
 public:
-    //Sounds
     QMediaPlayer *musicPlayer;
     QMediaPlayer *soundtrackPlayer;
     QMediaPlaylist *playList;
-    QVector<QString> shootingJukbox;
+    QVector<QString> playerOneShootingJukbox;
+    QVector<QString> playerTwoShootingJukbox;
     QVector<QString> ballonStriked;
     QVector<QString> opponentHit;
     QString soundtrack;

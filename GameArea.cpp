@@ -164,9 +164,6 @@ void GameArea::startGame()
 
   // Create obstacle
   this->resetBalloon();
-
-  //begin Soundtrack
-  Soundbox::getInstance();
 }
 
 void GameArea::shoot(Player *player)
@@ -209,7 +206,7 @@ std::vector<Player *> GameArea::getPlayers() const
 
 void GameArea::balloonHit()
 {
-  qDebug("Balloon hit");
+  qDebug("Balloon hit");  
   Soundbox::getInstance()->playSoundEffect(Sound::ballonStriked);
   // Get impact angle
   double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
@@ -232,6 +229,7 @@ void GameArea::opponentHit()
   qDebug("Opponent Hit");
   this->removeShot();
   Soundbox::getInstance()->playSoundEffect(Sound::opponentHit);
+
 }
 
 void GameArea::goalHit(Goal *goal)
