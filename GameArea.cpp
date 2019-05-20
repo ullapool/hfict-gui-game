@@ -165,7 +165,7 @@ void GameArea::startGame()
   // Create obstacle
   this->resetBalloon();
 
-  //Start Soundtrack
+  //begin Soundtrack
   Soundbox::getInstance();
 }
 

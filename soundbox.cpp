@@ -11,6 +11,7 @@
 
 Soundbox::Soundbox()
 {
+  //loading sounds
   shootingJukbox.push_back("bam.mp3");
   shootingJukbox.push_back("boom.mp3");
   shootingJukbox.push_back("gonnagetya.mp3");
@@ -19,16 +20,19 @@ Soundbox::Soundbox()
   //ballonStriked.push_back("fanny.mp3");
   //ballonStriked.push_back("bastard.mp3");
   ballonStriked.push_back("parrot.mp3");
+  ballonStriked.push_back("landHo.mp3");
   ballonStriked.push_back("juhu.mp3");
   ballonStriked.push_back("wohoo.mp3");
 
-  opponentHit.push_back("stoppit.mp3");
+  opponentHit.push_back("sharks.mp3");
+  opponentHit.push_back("rum.mp3");
+  opponentHit.push_back("liver.mp3");
+  opponentHit.push_back("aye.mp3");
+  //opponentHit.push_back("stoppit.mp3");
   opponentHit.push_back("stoppityadick.mp3");
 
   soundtrack = "pirate.mp3";
   goalCheering = "goal.mp3";
-
-  musicPlayer = new QMediaPlayer;
 
   playList = new QMediaPlaylist;
   this->playList->addMedia(QUrl::fromLocalFile(Constants::soundFolder + soundtrack));
@@ -37,9 +41,12 @@ Soundbox::Soundbox()
   soundtrackPlayer = new QMediaPlayer;
   this->soundtrackPlayer->setPlaylist(playList);
   this->soundtrackPlayer->play();
+
+  musicPlayer = new QMediaPlayer;
 }
 
 Soundbox *Soundbox::instance = nullptr;
+
 Soundbox *Soundbox::getInstance()
 {
     if(instance) {
@@ -54,7 +61,6 @@ Soundbox *Soundbox::getInstance()
 void Soundbox::playSoundEffect(Sound sound)
 {
     QString s;
-    QString m;
     switch(sound) {
     case Sound::shootingJukbox :
         s = shootingJukbox.at(rand() % shootingJukbox.size() );
@@ -64,17 +70,15 @@ void Soundbox::playSoundEffect(Sound sound)
         s = opponentHit.at(rand() % opponentHit.size() );
         break;
     case Sound::ballonStriked :
-         s = ballonStriked.at(rand() % ballonStriked.size() );
+        s = ballonStriked.at(rand() % ballonStriked.size() );
         break;
     case Sound::goalCheering :
         s = goalCheering;
         break;
-}
+    }
 
     this->musicPlayer->setMedia(QUrl::fromLocalFile(Constants::soundFolder + s));
     this->musicPlayer->play();
-
-
 }
 
 
