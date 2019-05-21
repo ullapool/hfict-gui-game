@@ -3,11 +3,11 @@
 
 #include <QString>
 
-
 class Constants
 {
-public:
+ public:
   static QString imgFolder;
+  static QString soundFolder;
   static QString sceneImgFile;
   static QString startScreenImgFile;
   static QString player1WonImgFile;
@@ -30,4 +30,4 @@ public:
   static int targetScore;
 };
 
-#endif // CONSTANTS_H
+#endif  // CONSTANTS_H

@@ -1,3 +1,4 @@
+
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
@@ -7,6 +8,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include "GameArea.h"
+enum class Sound;
 
 
 class MainWidget : public QWidget
@@ -58,9 +60,6 @@ public slots:
   void angleSliderMoved(int value);
   void actionButtonClicked();
   void gameFinished();
-
-private slots:
-
 };
 
 #endif // MAINWIDGET_H

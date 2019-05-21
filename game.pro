@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,6 +36,7 @@ SOURCES += \
     Shot.cpp \
     Thread.cpp \
     CollisionDetection.cpp \
+    soundbox.cpp \
     Goal.cpp
 
 HEADERS += \
@@ -49,6 +50,7 @@ HEADERS += \
     Shot.h \
     Thread.h \
     CollisionDetection.h \
+    soundbox.h \
     Goal.h
 
 # Default rules for deployment.

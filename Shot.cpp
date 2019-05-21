@@ -11,7 +11,8 @@ Shot::Shot(int x, int y, int speed, int angle, int player) : GameObject (x, y, C
   this->t = 0;
 }
 
-void Shot::move() {
+void Shot::move()
+{
   if (this->player == 0) {
     this->rotation += 30;
   } else {

@@ -1,9 +1,10 @@
 #include "MainWidget.h"
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QLabel>
 #include <QDebug>
+#include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QLabel>
+#include <QVBoxLayout>
+#include "soundbox.h"
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
@@ -11,6 +12,8 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
   this->createLayout();
   this->connectObjects();
   this->setFocusPolicy(Qt::StrongFocus);
+  //begin Soundtrack
+  Soundbox::getInstance();
 }
 
 void MainWidget::togglePlayer()
@@ -49,7 +52,6 @@ void MainWidget::createLayout()
   this->numberOfShotsInput = new QLineEdit();
   this->numberOfShotsInput->setReadOnly(true);
 
-
   // Create layout
   QVBoxLayout *layoutMain = new QVBoxLayout();
   QHBoxLayout *layoutControls = new QHBoxLayout();
@@ -65,11 +67,9 @@ void MainWidget::createLayout()
   layoutControls->addWidget(angleInput);
 
   // Prevent controls from gaining focus
-  for (int i = 0; i < layoutControls->count(); ++i)
-  {
+  for (int i = 0; i < layoutControls->count(); ++i) {
     QWidget *widget = layoutControls->itemAt(i)->widget();
-    if (widget)
-    {
+    if (widget) {
       widget->setFocusPolicy(Qt::NoFocus);
     }
   }
@@ -91,17 +91,18 @@ void MainWidget::connectObjects()
   connect(this->gameArea, &GameArea::shotStatusChanged, this->actionButton, &QPushButton::setDisabled);
 
   // Controls Key Binding
-  connect(this, &MainWidget::keyPressEnter, this->actionButton, &QPushButton::click);
-  connect(this, &MainWidget::keyPressUp, [this]{
+  connect(this, &MainWidget::keyPressEnter, this->actionButton,
+          &QPushButton::click);
+  connect(this, &MainWidget::keyPressUp, [this] {
     if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
   });
-  connect(this, &MainWidget::keyPressDown, [this]{
+  connect(this, &MainWidget::keyPressDown, [this] {
     if (this->actionButton->text() == "Shoot") this->angleSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
-  connect(this, &MainWidget::keyPressRight, [this]{
+  connect(this, &MainWidget::keyPressRight, [this] {
     if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepAdd);
   });
-  connect(this, &MainWidget::keyPressLeft, [this]{
+  connect(this, &MainWidget::keyPressLeft, [this] {
     if (this->actionButton->text() == "Shoot") this->speedSlider->triggerAction(QAbstractSlider::SliderSingleStepSub);
   });
 }
@@ -151,7 +152,7 @@ void MainWidget::angleSliderMoved(int value)
 
 void MainWidget::actionButtonClicked()
 {
-  if(this->actionButton->text() == "Start") {
+  if (this->actionButton->text() == "Start") {
     qDebug("Starting game");
     this->actionButton->setText("Shoot");
     this->angleSlider->setEnabled(true);
@@ -165,6 +166,14 @@ void MainWidget::actionButtonClicked()
     int shots = player->getShots();
     this->numberOfShotsInput->setText(QString::number(shots));
     this->gameArea->shoot(player);
+
+    // Sounds
+    if(playerTwosTurn){
+      Soundbox::getInstance()->playSoundEffect(Sound::shootingJukeboxPlayerTwo);
+    }
+    else {
+      Soundbox::getInstance()->playSoundEffect(Sound::shootingJukboxPlayerOne);
+    }
   }
 }
 

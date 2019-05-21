@@ -1,15 +1,16 @@
 #include "Obstacle.h"
-#include "Constants.h"
-#include <cmath>
 #include <QDebug>
+#include <QString>
+#include <QVector>
+#include <cmath>
 #include "CollisionDetection.h"
+#include "Constants.h"
+#include "soundbox.h"
 
-int Obstacle::getSpeed() const
+int Obstacle::getSpeed() const { return speed; }
+
+Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile, Constants::obstacleWidth)
 {
-    return speed;
-}
-
-Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile, Constants::obstacleWidth) {
   this->speed = 0;
   this->radAngle = 0;
   this->t = 0;
@@ -17,7 +18,8 @@ Obstacle::Obstacle(int x, int y) : GameObject (x, y, Constants::obstacleImgFile,
   this->invertYMovement = -1;
 }
 
-void Obstacle::move() {
+void Obstacle::move()
+{
   if (this->speed == 0) return; // cancel calculation if speed is 0
   int dx = static_cast<int>(this->speed/2 * cos(this->radAngle) * this->invertXMovement);
   int dy = static_cast<int>(this->speed/2 * sin(this->radAngle) * this->invertYMovement);
@@ -59,4 +61,3 @@ void Obstacle::impulse(int speed, double radAngle)
   this->speed = speed;
   this->radAngle = radAngle;
 }
-

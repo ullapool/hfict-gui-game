@@ -14,6 +14,7 @@
 #include "Goal.h"
 #include <QFont>
 #include <MainWidget.h>
+#include "soundbox.h"
 
 GameArea::GameArea(MainWidget *parent) :
   QWidget(parent),
@@ -223,7 +224,7 @@ std::vector<Player *> GameArea::getPlayers() const
 void GameArea::balloonHit()
 {
   qDebug("Balloon hit");
-
+  Soundbox::getInstance()->playSoundEffect(Sound::ballonStriked);
   // Get impact angle
   double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
 
@@ -237,7 +238,6 @@ void GameArea::balloonHit()
 void GameArea::balloonMissed()
 {
   qDebug("Out of bounds");
-
   this->removeShot();
 }
 
@@ -245,12 +245,21 @@ void GameArea::opponentHit()
 {
   qDebug("Opponent Hit");
   this->removeShot();
-  // play sound here
+  if(parent->isPlayerTwosTurn()) {
+    Soundbox::getInstance()->playSoundEffect(Sound::opponentTwoHit);
+  }
+  else {
+    Soundbox::getInstance()->playSoundEffect(Sound::opponentOnetHit);
+  }
+
+
 }
 
 void GameArea::goalHit(Goal *goal)
 {
+
   qDebug("GOOOAAAAL");
+  Soundbox::getInstance()->playSoundEffect(Sound::goalCheering);
   Player *scoringPlayer = this->players.at(!goal->isGoalTwo());
   scoringPlayer->incrementScore();
   qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();

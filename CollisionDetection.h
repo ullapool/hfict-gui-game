@@ -6,7 +6,8 @@
 #include "Obstacle.h"
 #include "GameArea.h"
 
-enum class BoundaryCollision {
+enum class BoundaryCollision
+{
   None,
   Left,
   Right,

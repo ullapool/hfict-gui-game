@@ -28,6 +28,7 @@ public:
   // Constructors
   explicit GameArea(MainWidget *parent = nullptr);
 
+
   // Properties
 
   // Methods
