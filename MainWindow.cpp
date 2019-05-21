@@ -13,7 +13,7 @@ void MainWindow::setupLayout()
 {
   // Setup window properties
   this->setWindowTitle("The Pirate Game");
-  this->setFixedSize(1000, 580);
+  this->setFixedSize(1000, 630);
 
   // Setup main widget
   this->mainWidget = new MainWidget();

@@ -24,7 +24,6 @@ void MainWidget::togglePlayer()
   this->angleSlider->setValue(activePlayer->getAngle());
   this->speedSlider->setValue(activePlayer->getSpeed());
   this->numberOfShotsInput->setText(QString::number(activePlayer->getShots()));
-  qDebug("Toggle Player finished");
 }
 
 bool MainWidget::isPlayerTwosTurn() const
