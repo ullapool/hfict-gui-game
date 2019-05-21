@@ -206,7 +206,7 @@ std::vector<Player *> GameArea::getPlayers() const
 
 void GameArea::balloonHit()
 {
-  qDebug("Balloon hit");  
+  qDebug("Balloon hit");
   Soundbox::getInstance()->playSoundEffect(Sound::ballonStriked);
   // Get impact angle
   double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
@@ -229,10 +229,10 @@ void GameArea::opponentHit()
   qDebug("Opponent Hit");
   this->removeShot();
   if(parent->isPlayerTwosTurn()) {
-  Soundbox::getInstance()->playSoundEffect(Sound::opponentTwoHit);
+    Soundbox::getInstance()->playSoundEffect(Sound::opponentTwoHit);
   }
   else {
-      Soundbox::getInstance()->playSoundEffect(Sound::opponentOnetHit);
+    Soundbox::getInstance()->playSoundEffect(Sound::opponentOnetHit);
   }
 
 

@@ -170,7 +170,7 @@ void MainWidget::actionButtonClicked()
 
     // Sounds
     if(playerTwosTurn){
-    Soundbox::getInstance()->playSoundEffect(Sound::shootingJukeboxPlayerTwo);
+      Soundbox::getInstance()->playSoundEffect(Sound::shootingJukeboxPlayerTwo);
     }
     else {
       Soundbox::getInstance()->playSoundEffect(Sound::shootingJukboxPlayerOne);

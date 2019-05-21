@@ -3,8 +3,8 @@
 // Root folders
 // QString Constants::imgFolder("C:\\gui-game\\hfict-gui-game\\img\\");
 // QString Constants::soundFolder("C:\\gui-game\\hfict-gui-game\\sounds\\");
-QString Constants::imgFolder("C:\\gui-game\\hfict-gui-game\\img\\");
-QString Constants::soundFolder("C:\\gui-game\\hfict-gui-game\\sounds\\");
+QString Constants::imgFolder("C:\\dev\\hfict-gui-game\\img\\");
+QString Constants::soundFolder("C:\\dev\\hfict-gui-game\\sounds\\");
 
 
 // Scene
