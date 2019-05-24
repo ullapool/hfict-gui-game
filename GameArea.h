@@ -8,15 +8,26 @@
 #include "Obstacle.h"
 #include "Shot.h"
 #include "Player.h"
+#include "Goal.h"
+
+class MainWidget;
 
 class GameArea : public QWidget
 {
   Q_OBJECT
 
+enum class GameStatus {
+  NotStarted,
+  InProgress,
+  Player1Won,
+  Player2Won
+};
+
 // Public Members
 public:
   // Constructors
-  explicit GameArea(QWidget *parent = nullptr);
+  explicit GameArea(MainWidget *parent = nullptr);
+
 
   // Properties
 
@@ -32,18 +43,31 @@ private:
   // Constructors
 
   // Properties
+  MainWidget *parent;
   QImage *backgroundImg;
+  QImage *startScreenImg;
+  QImage *player1WonImg;
+  QImage *player2WonImg;
+  QImage *scoreBoardImg;
   std::vector<GameObject*> gameObjects;
-  std::vector<Shot*> shots;
   Shot *activeShot;
   std::vector<Player*> players;
-  Obstacle *obstacle;
+  std::vector<Goal*> goals;
+  Obstacle *balloon;
+  GameStatus status;
 
 
   // Methods
   void setupAnimationThread();
+  void resetBalloon();
   void balloonHit();
   void balloonMissed();
+  void opponentHit();
+  void goalHit(Goal *goal);
+  void drawScoreBoard(QPainter *p);
+  void drawPlayerIndicator(QPainter *p);
+  void drawShotTrajectory();
+  void drawTrajectory(QPainter *p);
   void next();
 
 // Event Handling
@@ -51,10 +75,7 @@ private:
 signals:
   void gameFinished();
   void playerToggled();
-
-public slots:
-
-private slots:
+  void shotStatusChanged(bool active);
 };
 
 #endif // GAMEAREA_H

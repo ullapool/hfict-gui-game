@@ -1,3 +1,4 @@
+
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
@@ -7,6 +8,7 @@
 #include <QSlider>
 #include <QLineEdit>
 #include "GameArea.h"
+enum class Sound;
 
 
 class MainWidget : public QWidget
@@ -22,7 +24,7 @@ public:
 
   // Methods
   void togglePlayer();
-  bool getIsPlayerOnesTurn() const;
+  bool isPlayerTwosTurn() const;
 
 private:
   // Constructors
@@ -37,24 +39,27 @@ private:
   QLineEdit *speedInput;
   QLineEdit *angleInput;
   GameArea *gameArea;
-  bool isPlayerTwosTurn;
+  bool playerTwosTurn;
 
   // Methods
   void createLayout();
   void connectObjects();
+  void keyPressEvent(QKeyEvent *event);
 
 
 // Event Handling
 signals:
+  void keyPressUp();
+  void keyPressDown();
+  void keyPressLeft();
+  void keyPressRight();
+  void keyPressEnter();
 
 public slots:
   void speedSliderMoved(int value);
   void angleSliderMoved(int value);
   void actionButtonClicked();
   void gameFinished();
-
-private slots:
-
 };
 
 #endif // MAINWIDGET_H

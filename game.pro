@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -35,7 +35,9 @@ SOURCES += \
     Player.cpp \
     Shot.cpp \
     Thread.cpp \
-    CollisionDetection.cpp
+    CollisionDetection.cpp \
+    soundbox.cpp \
+    Goal.cpp
 
 HEADERS += \
         MainWindow.h \
@@ -47,7 +49,9 @@ HEADERS += \
     Player.h \
     Shot.h \
     Thread.h \
-    CollisionDetection.h
+    CollisionDetection.h \
+    soundbox.h \
+    Goal.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

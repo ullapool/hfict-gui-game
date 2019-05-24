@@ -11,18 +11,83 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include "Goal.h"
+#include <QFont>
+#include <MainWidget.h>
+#include "soundbox.h"
 
-GameArea::GameArea(QWidget *parent) : QWidget(parent), activeShot(nullptr)
+GameArea::GameArea(MainWidget *parent) :
+  QWidget(parent),
+  parent(parent),
+  activeShot(nullptr),
+  balloon(nullptr),
+  status(GameStatus::NotStarted)
 {
   qDebug("Game Area");
 
   // Load background image
-  this->backgroundImg = new QImage(Constants::imgFolder + "background.jpg");
+  this->backgroundImg = new QImage(Constants::imgFolder + Constants::sceneImgFile);
   *this->backgroundImg = this->backgroundImg->scaledToWidth(1000);
 
+  // Load screen images
+  this->startScreenImg = new QImage(Constants::imgFolder + Constants::startScreenImgFile);
+  *this->startScreenImg = this->startScreenImg->scaledToWidth(1000);
+  this->player1WonImg = new QImage(Constants::imgFolder + Constants::player1WonImgFile);
+  *this->player1WonImg = this->player1WonImg->scaledToWidth(1000);
+  this->player2WonImg = new QImage(Constants::imgFolder + Constants::player2WonImgFile);
+  *this->player2WonImg = this->player2WonImg->scaledToWidth(1000);
+
+  // Load score board image
+  this->scoreBoardImg = new QImage(Constants::imgFolder + Constants::scoreBoardImgFile);
+  *this->scoreBoardImg = this->scoreBoardImg->scaledToWidth(Constants::scoreBoardWidth);
 
   // Setup animation thread
   this->setupAnimationThread();
+}
+
+void GameArea::drawScoreBoard(QPainter *p)
+{
+  p->drawImage(this->width() / 2 - 50, -10, *this->scoreBoardImg);
+
+  QFont font;
+  font.setFamily("Viner Hand ITC");
+  font.setPixelSize(40);
+  p->setFont(font);
+  p->setPen(Qt::white);
+
+  p->drawText(this->width() / 2 - 35, 40, QString::number(this->players.at(0)->getScore()));
+  p->drawText(this->width() / 2, 40, ":");
+  p->drawText(this->width() / 2 + 25, 40, QString::number(this->players.at(1)->getScore()));
+}
+
+void GameArea::drawPlayerIndicator(QPainter *p)
+{
+  p->setPen(QPen(Qt::yellow, 5));
+  int indicatorX = players.at(parent->isPlayerTwosTurn())->getX();
+  int indicatorY = players.at(parent->isPlayerTwosTurn())->getY() + players.at(parent->isPlayerTwosTurn())->height() + 10;
+  int indicatorWidth = players.at(parent->isPlayerTwosTurn())->width();
+  p->drawLine(indicatorX, indicatorY, indicatorX + indicatorWidth, indicatorY);
+}
+
+void GameArea::drawTrajectory(QPainter *p)
+{
+  p->setPen(QPen(Qt::red, 3));
+  Player *player = this->players.at(parent->isPlayerTwosTurn());
+  double t = 0;
+  int x = player->center().rx();
+  int y = player->center().ry();
+  for (int i = 0; i < 30; i++) {
+    int angle = player->getAngleConverted();
+    int speed = player->getSpeed();
+    const double g = 9.81;
+    double rad = 3.1415926 / 180 * angle;
+    int dx = static_cast<int>(speed / 3 * cos(rad) * t);
+    int dy = static_cast<int>(speed / 3 * sin(rad) * t - (g/2) * pow(t, 2));
+    t += 0.1;
+    x += dx / 2;
+    y -= dy / 2;
+    p->drawPoint(x, y);
+  };
 }
 
 void GameArea::paintEvent(QPaintEvent *event)
@@ -32,13 +97,40 @@ void GameArea::paintEvent(QPaintEvent *event)
   // Background
   p->drawImage(0, 0, *this->backgroundImg);
 
-  // Game objects
-  for (GameObject *gameObject : this->gameObjects) {
-    gameObject->paint(p);
+  switch (this->status) {
+  // Start Screen
+  case GameStatus::NotStarted :
+    p->drawImage(0, 0, *this->startScreenImg);
+    break;
+
+  // Game Screen
+  case GameStatus::InProgress :
+    // Game objects
+    for (GameObject *gameObject : this->gameObjects) {
+      gameObject->paint(p);
+    }
+
+    if (this->players.size() == 2) {
+      drawScoreBoard(p);
+      drawPlayerIndicator(p);
+    }
+
+    // Shot trajectory
+    if (Constants::showTrajectory && this->players.size() == 2 && !this->activeShot) {
+      drawTrajectory(p);
+    }
+    break;
+
+  // Game Over Screen
+  case GameStatus::Player1Won :
+    p->drawImage(0, 0, *this->player1WonImg);
+    break;
+  case GameStatus::Player2Won :
+    p->drawImage(0, 0, *this->player2WonImg);
+    break;
   }
 
-  // Release painting ressources
-  p->end();
+  delete p;
 }
 
 void GameArea::setupAnimationThread()
@@ -48,30 +140,54 @@ void GameArea::setupAnimationThread()
   animationThread->start();
 }
 
+void GameArea::resetBalloon()
+{
+  qDebug("Reset Balloon");
+  if (this->balloon) {
+    auto itGameObjects = std::find(gameObjects.begin(), gameObjects.end(), this->balloon);
+    gameObjects.erase(itGameObjects);
+    delete this->balloon;
+    this->balloon = nullptr;
+  }
+
+  int x = this->width() / 2 - Constants::obstacleWidth / 2;
+  int y = rand() % static_cast<int>(this->height() * 0.8) + static_cast<int>(this->height() * 0.1);
+  this->balloon = new Obstacle(x, y);
+  this->gameObjects.push_back(this->balloon);
+}
+
 void GameArea::startGame()
 {
-  srand(time(nullptr));
+  this->status = GameStatus::InProgress;
+  srand(static_cast<unsigned int>(time(nullptr)));
+
+  // Create goal
+  Goal *goal1 = new Goal(-10, 30, false);
+  Goal *goal2 = new Goal(this->width() - Constants::goal2Width + 10, 30, true);
+  this->gameObjects.push_back(goal1);
+  this->gameObjects.push_back(goal2);
+  this->goals.push_back(goal1);
+  this->goals.push_back(goal2);
 
   // Create player
-  Player *player1 = new Player(20, 410, false);
-  Player *player2 = new Player(this->width() - Constants::player2Width - 20, 410, true);
+  Player *player1 = new Player(5, 340, false);
+  Player *player2 = new Player(this->width() - Constants::player2Width - 5, 340, true);
   this->gameObjects.push_back(player1);
   this->gameObjects.push_back(player2);
   this->players.push_back(player1);
   this->players.push_back(player2);
+  emit this->playerToggled();
   if (rand() % 2) emit this->playerToggled();
 
   // Create obstacle
-  int x = this->width() / 2 - Constants::obstacleWidth / 2;
-  int y = rand() % static_cast<int>(this->height() * 0.75);
-  this->obstacle = new Obstacle(x, y);
-  this->gameObjects.push_back(this->obstacle);
+  this->resetBalloon();
 }
 
 void GameArea::shoot(Player *player)
 {
-  this->activeShot = new Shot(player->center().rx(), player->center().ry(), player->getSpeed(), player->getAngleConverted());
+  this->activeShot = new Shot(player->center().rx(), player->center().ry() - 30, player->getSpeed(), player->getAngleConverted(), player->isPlayerTwo());
   this->gameObjects.push_back(this->activeShot);
+  emit shotStatusChanged(true);
 }
 
 void GameArea::removeShot()
@@ -81,20 +197,23 @@ void GameArea::removeShot()
   gameObjects.erase(itGameObjects);
   delete this->activeShot;
   this->activeShot = nullptr;
+  emit this->playerToggled();
+  emit shotStatusChanged(false);
 }
 
 void GameArea::reset()
 {
-  std::vector<GameObject*> tempObjects = this->gameObjects;
-
-  // Remove all game objects from vectors
-  this->activeShot = nullptr;
-  this->gameObjects.clear();
-
   // Delete all game objects
-  for (GameObject *gameObject : tempObjects) {
+  for (GameObject *gameObject : this->gameObjects) {
     delete gameObject;
   }
+
+  // Remove all game objects from vectors
+  this->gameObjects.clear();
+  this->players.clear();
+  this->goals.clear();
+  this->activeShot = nullptr;
+  this->balloon = nullptr;
 }
 
 std::vector<Player *> GameArea::getPlayers() const
@@ -105,24 +224,52 @@ std::vector<Player *> GameArea::getPlayers() const
 void GameArea::balloonHit()
 {
   qDebug("Balloon hit");
-
+  Soundbox::getInstance()->playSoundEffect(Sound::ballonStriked);
   // Get impact angle
-  double angle = CollisionDetection::impactAngle(this->obstacle, this->activeShot);
+  double angle = CollisionDetection::impactAngle(this->balloon, this->activeShot);
 
   // Give impulse to obstacle
-  this->obstacle->impulse(this->activeShot->getSpeed(), angle);
+  this->balloon->impulse(this->activeShot->getSpeed(), angle);
 
   // Remove shot
   this->removeShot();
-  emit this->playerToggled();
 }
 
 void GameArea::balloonMissed()
 {
   qDebug("Out of bounds");
-
   this->removeShot();
-  emit this->playerToggled();
+}
+
+void GameArea::opponentHit()
+{
+  qDebug("Opponent Hit");
+  this->removeShot();
+  if(parent->isPlayerTwosTurn()) {
+    Soundbox::getInstance()->playSoundEffect(Sound::opponentTwoHit);
+  }
+  else {
+    Soundbox::getInstance()->playSoundEffect(Sound::opponentOnetHit);
+  }
+
+
+}
+
+void GameArea::goalHit(Goal *goal)
+{
+
+  qDebug("GOOOAAAAL");
+  Soundbox::getInstance()->playSoundEffect(Sound::goalCheering);
+  Player *scoringPlayer = this->players.at(!goal->isGoalTwo());
+  scoringPlayer->incrementScore();
+  qDebug() << "Player 1: " << players.at(0)->getScore() << " | Player 2: " << players.at(1)->getScore();
+  this->resetBalloon();
+  for (Player *player : this->players) player->resetShots();
+  if (scoringPlayer->getScore() == Constants::targetScore) {
+    this->status = scoringPlayer->isPlayerTwo() ? GameStatus::Player2Won : GameStatus::Player1Won;
+    emit this->gameFinished();
+    this->reset();
+  }
 }
 
 void GameArea::next()
@@ -134,8 +281,19 @@ void GameArea::next()
   this->update();
 
   // Check balloon hit
-  if (this->activeShot && CollisionDetection::check(this->obstacle, this->activeShot)) balloonHit();
+  if (this->activeShot && this->balloon && CollisionDetection::checkHit(this->balloon, this->activeShot)) this->balloonHit();
+
+  // Check goal hit
+  for (Goal *goal : this->goals) {
+    if (this->balloon && CollisionDetection::checkGoal(this->balloon, goal)) this->goalHit(goal);
+  }
+
+  // Check boundary hit
+  if (this->balloon) this->balloon->impulse(CollisionDetection::checkBoundary(this->balloon, this));
+
+  // Check opponent hit
+  if (this->activeShot && this->players.size() == 2 && CollisionDetection::checkHit(this->players.at(!parent->isPlayerTwosTurn()), this->activeShot)) this->opponentHit();
 
   // Check out of bounds
-  if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) balloonMissed();
+  if (this->activeShot && CollisionDetection::outOfBounds(this->activeShot, this)) this->balloonMissed();
 }

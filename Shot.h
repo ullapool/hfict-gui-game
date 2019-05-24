@@ -8,12 +8,14 @@ class Shot : public GameObject
 private:
   int speed;
   int angle;
+  int rotation;
+  int player;
   double t;
 public:
-  Shot(int x, int y, int speed, int angle);
+  Shot(int x, int y, int speed, int angle, int player);
   virtual void move();
+  virtual void paint(QPainter *painter);
   virtual int getSpeed();
-  virtual bool isVisible(int x, int y);
 };
 
 #endif // SHOT_H
