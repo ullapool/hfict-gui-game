@@ -1,8 +1,8 @@
-# hfict-gui-game
+# Pirate Game
 
 Simples Spiel, welches im Rahmen eines Kurzprojekts an der hf-ict mit Qt entwickelt wurde.
 
-![screenshot 1](https://github.com/khazeamo/hfict-gui-game/blob/master/img/screenshot1.png)
+![splash screen](./img/splashscreen.png)
 
 ## Installation
 
@@ -12,7 +12,12 @@ Das Spiel kann anschliessend über die EXE gestartet werden.
 ## Spielidee
 Die beiden Spieler werfen abwechslungsweise mit Flaschen und versuchen den Papageien-Ballon so zu treffen,
 dass dieser sich ins Tor des Gegenspielers bewegt.
-Das Spiel endet, wenn ein Spieler 3 Tore erzielt hat.
+
+![gameplay](./img/gameplay.png)
+
+Das Spiel endet, wenn ein Spieler 2 Tore erzielt hat.
+
+![game over](./img/gameover.png)
 
 ## Steuerung
 Das Spiel kann über den Button `Start` gestartet werden.
