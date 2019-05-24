@@ -1,10 +1,8 @@
 #include "Constants.h"
 
 // Root folders
-// QString Constants::imgFolder("C:\\gui-game\\hfict-gui-game\\img\\");
-// QString Constants::soundFolder("C:\\gui-game\\hfict-gui-game\\sounds\\");
-QString Constants::imgFolder("C:\\dev\\hfict-gui-game\\img\\");
-QString Constants::soundFolder("C:\\dev\\hfict-gui-game\\sounds\\");
+QString Constants::imgFolder(".\\img\\");
+QString Constants::soundFolder(".\\sounds\\");
 
 
 // Scene
@@ -44,7 +42,7 @@ int Constants::scoreBoardWidth = 110;
 QString Constants::scoreBoardImgFile("scoreboard.png");
 
 // Trajectory
-bool Constants::showTrajectory = true;
+bool Constants::showTrajectory = false;
 
 // Target Score
 int Constants::targetScore = 2;
